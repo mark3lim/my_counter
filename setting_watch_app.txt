@@ -1,0 +1,39 @@
+### Flutter 프로젝트에 Wear OS 및 watchOS 앱 추가하기
+
+이 문서는 기존 Flutter 프로젝트에 Android Watch (Wear OS) 및 Apple Watch (watchOS) 앱을 추가하는 방법을 안내합니다.
+
+---
+
+### 1. Wear OS (Android Watch) 설정
+
+Android Studio를 사용하여 `android` 디렉터리에 새로운 Wear OS 모듈을 추가해야 합니다.
+
+1.  **Android Studio에서 프로젝트 열기**:
+    *   Android Studio를 엽니다.
+    *   "Open an Existing Project"를 선택하고, Flutter 프로젝트 내의 `android` 디렉터리를 엽니다.
+
+2.  **새로운 Wear OS 모듈 추가**:
+    *   `File > New > New Module...`로 이동합니다.
+    *   "Wear OS Module"을 선택하고 "Next"를 클릭합니다.
+    *   애플리케이션/모듈 이름을 설정합니다 (예: `wear`).
+    *   "Minimum SDK"를 선택하고 "Finish"를 클릭합니다.
+
+3.  **모듈 확인**:
+    *   이 과정이 완료되면 `android/wear` 디렉터리가 생성되고, 기본 워치 앱 구조가 만들어집니다.
+    *   Android Studio가 자동으로 `android/settings.gradle` 파일에 `:wear` 모듈을 추가하여 프로젝트에 포함시킵니다.
+
+---
+
+### 2. watchOS (Apple Watch) 설정
+
+Xcode를 사용하여 `ios` 디렉터리에 새로운 Watch App 타겟을 추가해야 합니다.
+
+1.  **Xcode에서 프로젝트 열기**:
+    *   터미널에서 Flutter 프로젝트의 `ios` 디렉터리로 이동한 후 `open Runner.xcworkspace` 명령을 실행하여 Xcode에서 프로젝트를 엽니다.
+
+2.  **새로운 Watch App 타겟 추가**:
+    *   Xcode에서 `File > New > Target...`으로 이동합니다.
+    *   `watchOS` 탭을 선택합니다.
+    *   "App" 템플릿을 선택하고 "Next"를 클릭합니다.
+    *   Product Name (예: `WatchApp`), 인터페이스(SwiftUI 또는 Storyboard), 라이프사이클 등을 설정합니다.
+    *   "Finish"를 클릭하면 Xcode가 워치 앱 타겟과 관련 파일들을 생성합니다.

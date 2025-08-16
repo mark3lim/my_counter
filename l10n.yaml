@@ -1,0 +1,19 @@
+# flutter gen-l10n 명령을 위한 구성 파일
+
+# 번역 파일(.arb)이 위치한 디렉토리
+arb-dir: lib/l10n
+
+# 모든 번역 키의 기준이 되는 템플릿 파일
+template-arb-file: app_ko.arb
+
+# 생성될 Dart 파일의 이름
+output-localization-file: app_localizations.dart
+
+# Dart 코드를 생성할 출력 디렉토리
+output-dir: lib/generated/l10n
+
+# (선택 사항) 생성될 클래스의 이름. 지정하지 않으면 AppLocalizations가 됨
+# output-class: AppLocalizations
+
+# (선택 사항) nullable 게터를 생성할지 여부. 기본값은 true
+# nullable-getter: false
