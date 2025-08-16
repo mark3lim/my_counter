@@ -2,6 +2,7 @@ import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
+import 'package:counting_app/presentation/views/calendar_home_page.dart';
 import 'package:counting_app/presentation/views/saved_basic_counting_detail_view.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -21,6 +22,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late final CountingRepository _repository;
   List<CategoryList> _categoryLists = [];
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -28,6 +31,19 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     _repository = CountingRepository();
     _loadCategoryLists();
+    _pageController.addListener(() {
+      if (_pageController.page?.round() != _currentPage) {
+        setState(() {
+          _currentPage = _pageController.page!.round();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   // 저장소에서 카테고리 목록을 비동기적으로 불러와 상태를 업데이트합니다.
@@ -104,134 +120,144 @@ class _HomeViewState extends State<HomeView> {
             fontWeight: FontWeight.bold,
             fontSize: 20.0),
       ),
-      body: _categoryLists.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 8),
-                  CountingCard(
-                    text: localizations.addNewCounting,
-                    textAlign: TextAlign.left,
-                    onTap: () =>
-                        Navigator.pushNamed(context, BasicCountingView.routeName),
-                    icon: Icons.mode_edit,
-                  ),
-                ],
-              ),
-            )
-          : CustomScrollView(
-              slivers: [
-                // 저장된 카테고리 목록을 동적으로 표시합니다.
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final categoryList = _categoryLists[index];
-                        return Dismissible(
-                          key: Key(categoryList.id),
-                          direction: DismissDirection.endToStart,
-                          // 삭제 확인 다이얼로그를 표시합니다.
-                          confirmDismiss: (direction) async {
-                            final bool? confirmed = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text(localizations.checkDeleteTitle),
-                                  content: Text(
-                                      "'${categoryList.name} ${localizations.checkDeleteMessage}'"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text(localizations.cancel),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                    ),
-                                    TextButton(
-                                      child: Text(localizations.delete),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            return confirmed;
-                          },
-                          // 다이얼로그에서 '삭제'를 선택한 경우에만 호출됩니다.
-                          onDismissed: (direction) async {
-                            final index = _categoryLists.indexOf(categoryList);
-                            final item = _categoryLists[index];
-                            final scaffoldMessenger = ScaffoldMessenger.of(context);
-                            final loc = AppLocalizations.of(context)!;
+      body: PageView(
+        controller: _pageController,
+        children: [
+          _buildHomeContent(context, localizations),
+          const CalendarHomePage(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavBar(currentPage: _currentPage),
+    );
+  }
 
-                            setState(() {
-                              _categoryLists.removeAt(index);
-                            });
-
-                            try {
-                              await _repository.deleteCategoryList(item.id);
-                            } catch (e) {
-                              setState(() {
-                                _categoryLists.insert(index, item);
-                              });
-
-                              if (mounted) {
-                                scaffoldMessenger.showSnackBar(
-                                  SnackBar(
-                                    content: Text(loc.deleteFailedMessage),
-                                    action: SnackBarAction(
-                                      label: loc.okayBtn,
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          background: Container(
-                            color: Colors.red,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
-                            alignment: Alignment.centerRight,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.delete,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                const Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                            child: CountingCard(
-                              text: categoryList.name,
-                              textAlign: TextAlign.left,
-                              onTap: () => _navigateToDetail(categoryList),
-                              icon: _getIconForCycleType(categoryList.cycleType),
-                              backgroundColor: _getColorForCycleType(categoryList.cycleType),
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: _categoryLists.length,
-                    ),
-                  ),
+  Widget _buildHomeContent(BuildContext context, AppLocalizations localizations) {
+    return _categoryLists.isEmpty
+        ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 8),
+                CountingCard(
+                  text: localizations.addNewCounting,
+                  textAlign: TextAlign.left,
+                  onTap: () =>
+                      Navigator.pushNamed(context, BasicCountingView.routeName),
+                  icon: Icons.mode_edit,
                 ),
               ],
             ),
-      bottomNavigationBar: const BottomNavBar(),
-    );
+          )
+        : CustomScrollView(
+            slivers: [
+              // 저장된 카테고리 목록을 동적으로 표시합니다.
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final categoryList = _categoryLists[index];
+                      return Dismissible(
+                        key: Key(categoryList.id),
+                        direction: DismissDirection.endToStart,
+                        // 삭제 확인 다이얼로그를 표시합니다.
+                        confirmDismiss: (direction) async {
+                          final bool? confirmed = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(localizations.checkDeleteTitle),
+                                content: Text(
+                                    "'${categoryList.name} ${localizations.checkDeleteMessage}'"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(localizations.cancel),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                  ),
+                                  TextButton(
+                                    child: Text(localizations.delete),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return confirmed;
+                        },
+                        // 다이얼로그에서 '삭제'를 선택한 경우에만 호출됩니다.
+                        onDismissed: (direction) async {
+                          final index = _categoryLists.indexOf(categoryList);
+                          final item = _categoryLists[index];
+                          final scaffoldMessenger = ScaffoldMessenger.of(context);
+                          final loc = AppLocalizations.of(context)!;
+
+                          setState(() {
+                            _categoryLists.removeAt(index);
+                          });
+
+                          try {
+                            await _repository.deleteCategoryList(item.id);
+                          } catch (e) {
+                            setState(() {
+                              _categoryLists.insert(index, item);
+                            });
+
+                            if (mounted) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(loc.deleteFailedMessage),
+                                  action: SnackBarAction(
+                                    label: loc.okayBtn,
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 20),
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.delete,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+                          child: CountingCard(
+                            text: categoryList.name,
+                            textAlign: TextAlign.left,
+                            onTap: () => _navigateToDetail(categoryList),
+                            icon: _getIconForCycleType(categoryList.cycleType),
+                            backgroundColor: _getColorForCycleType(categoryList.cycleType),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: _categoryLists.length,
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 }

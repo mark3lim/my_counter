@@ -64,9 +64,8 @@ class _CountingCardState extends State<CountingCard>
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final cardColor = widget.backgroundColor;
-    final highlightColor = isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
+    final highlightColor = Colors.grey.shade200;
 
     // 터치 이벤트를 감지하는 위젯입니다.
     return GestureDetector(
@@ -93,6 +92,7 @@ class _CountingCardState extends State<CountingCard>
                       Icon(
                         widget.icon,
                         size: 24.0,
+                        color: Colors.black,
                       ),
                       const SizedBox(width: 12.0),
                     ],
@@ -101,7 +101,8 @@ class _CountingCardState extends State<CountingCard>
                         widget.text,
                         style: TextStyle(
                           fontSize: 18.0,
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                         textAlign: widget.textAlign,
                       ),

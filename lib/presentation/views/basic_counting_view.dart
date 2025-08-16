@@ -4,7 +4,7 @@ import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_setting_view.dart';
 import 'package:counting_app/presentation/widgets/custom_app_next_bar.dart';
-import 'package:counting_app/presentation/widgets/liquid_glass_button.dart';
+import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -200,10 +200,10 @@ class _BasicCountingViewState extends State<BasicCountingView> {
             ),
             const SizedBox(width: 12),
             // 입력 필드를 닫는 취소 버튼입니다.
-            LiquidGlassButton(
+            GlassIconButton(
               onPressed: _toggleAddCategoryView,
               icon: Icons.remove,
-              color: const Color(0xFFF44336),
+              iconColor: const Color(0xFFF44336),
             ),
           ],
         ),

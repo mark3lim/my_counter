@@ -36,7 +36,10 @@ class _BasicCountingSettingViewState extends State<BasicCountingSettingView> {
   late List<Map<String, String>> _cycleData;
 
   // common text style
-  final TextStyle commonTextStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold,);
+  final TextStyle commonTextStyle = const TextStyle(
+    fontSize: 18, 
+    fontWeight: FontWeight.bold,
+  );
 
   @override
   void initState() {
