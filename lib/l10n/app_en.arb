@@ -29,5 +29,6 @@
   "daily": "Daily",
   "weekly": "Weekly",
   "monthly": "Monthly",
-  "countingType": "Counting Type"
+  "countingType": "Counting Type",
+  "editCounting": "Edit Counting"
 }

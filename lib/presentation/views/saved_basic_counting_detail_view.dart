@@ -1,6 +1,7 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/views/edit_basic_counting_view.dart';
 import 'package:flutter/material.dart';
 
 // 저장된 카운팅 목록의 상세 화면을 표시하는 위젯입니다.
@@ -72,6 +73,23 @@ class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailV
     return Scaffold(
       appBar: AppBar(
         title: Text(_currentCategoryList.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              final result = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditBasicCountingView(categoryList: _currentCategoryList),
+                ),
+              );
+              if (result != null && result is CategoryList && mounted) {
+                setState(() {
+                  _currentCategoryList = result;
+                });
+              }
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: _currentCategoryList.categoryList.length,

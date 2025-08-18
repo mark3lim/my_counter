@@ -97,4 +97,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get countingType => '카운팅 타입';
+
+  @override
+  String get editCounting => '카운트 수정';
 }

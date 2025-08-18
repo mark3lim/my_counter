@@ -97,4 +97,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get countingType => 'Counting Type';
+
+  @override
+  String get editCounting => 'Edit Counting';
 }

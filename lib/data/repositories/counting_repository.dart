@@ -83,4 +83,11 @@ class CountingRepository {
       await saveAllCategoryLists(lists);
     });
   }
+
+  Future<bool> isNameExists(String name, {String? excludeId}) async {
+    final lists = await getAllCategoryLists();
+    return lists.any((list) =>
+        list.name.trim().toLowerCase() == name.trim().toLowerCase() &&
+        (excludeId == null || list.id != excludeId));
+  }
 }

@@ -277,6 +277,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'카운팅 타입'**
   String get countingType;
+
+  /// No description provided for @editCounting.
+  ///
+  /// In ko, this message translates to:
+  /// **'카운트 수정'**
+  String get editCounting;
 }
 
 class _AppLocalizationsDelegate

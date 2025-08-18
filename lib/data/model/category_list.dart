@@ -23,6 +23,28 @@ class CategoryList {
     this.isForAnalyze = true, // for analyze
   }) : id = id ?? const Uuid().v4();
 
+  CategoryList copyWith({
+    String? id,
+    String? name,
+    List<Category>? categoryList,
+    DateTime? modifyDate,
+    bool? useNegativeNum,
+    bool? isHidden,
+    bool? isForAnalyze,
+    String? cycleType,
+  }) {
+    return CategoryList(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      categoryList: categoryList ?? this.categoryList,
+      modifyDate: modifyDate ?? this.modifyDate,
+      useNegativeNum: useNegativeNum ?? this.useNegativeNum,
+      isHidden: isHidden ?? this.isHidden,
+      isForAnalyze: isForAnalyze ?? this.isForAnalyze,
+      cycleType: cycleType ?? this.cycleType,
+    );
+  }
+
 // JSON 맵에서 객체를 생성합니다.
 factory CategoryList.fromJson(Map<String, dynamic> json) {
   var categoriesFromJson = json['categoryList'] as List<dynamic>? ?? [];
