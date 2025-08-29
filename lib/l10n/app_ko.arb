@@ -30,5 +30,7 @@
   "weekly": "주간",
   "monthly": "월간",
   "countingType": "카운팅 타입",
-  "editCounting": "카운트 수정"
+  "editCounting": "카운트 수정",
+  "settings": "설정",
+  "showHiddenLists": "숨겨진 목록 보기"
 }

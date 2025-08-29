@@ -100,4 +100,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editCounting => 'Edit Counting';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get showHiddenLists => 'Show hidden lists';
 }

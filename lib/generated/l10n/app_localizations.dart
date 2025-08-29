@@ -283,6 +283,18 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'카운트 수정'**
   String get editCounting;
+
+  /// No description provided for @settings.
+  ///
+  /// In ko, this message translates to:
+  /// **'설정'**
+  String get settings;
+
+  /// No description provided for @showHiddenLists.
+  ///
+  /// In ko, this message translates to:
+  /// **'숨겨진 목록 보기'**
+  String get showHiddenLists;
 }
 
 class _AppLocalizationsDelegate

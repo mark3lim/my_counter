@@ -100,4 +100,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get editCounting => '카운트 수정';
+
+  @override
+  String get settings => '설정';
+
+  @override
+  String get showHiddenLists => '숨겨진 목록 보기';
 }

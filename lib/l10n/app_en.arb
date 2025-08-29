@@ -30,5 +30,7 @@
   "weekly": "Weekly",
   "monthly": "Monthly",
   "countingType": "Counting Type",
-  "editCounting": "Edit Counting"
+  "editCounting": "Edit Counting",
+  "settings": "Settings",
+  "showHiddenLists": "Show hidden lists"
 }

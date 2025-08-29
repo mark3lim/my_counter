@@ -46,11 +46,45 @@ class BottomNavBar extends StatelessWidget {
             }),
           ),
           // 설정 아이콘 버튼 (리퀴드 글래스 효과 적용)
-          GlassIconButton(
-            icon: Icons.settings,
-            iconColor: isDarkMode ? Colors.white : Colors.black,
-            onPressed: () {
-              // TODO: 설정 페이지로 이동하는 기능 구현
+          Builder(
+            builder: (context) {
+              return GlassIconButton(
+                icon: Icons.settings,
+                iconColor: isDarkMode ? Colors.white : Colors.black,
+                onPressed: () {
+                  final RenderBox renderBox = context.findRenderObject() as RenderBox;
+                  final Offset offset = renderBox.localToGlobal(Offset.zero);
+                  final Size size = renderBox.size;
+
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(
+                      offset.dx,
+                      offset.dy - 80, // 메뉴가 버튼 위에 나타나도록 오프셋 조정
+                      offset.dx + size.width,
+                      offset.dy,
+                    ),
+                    items: [
+                      PopupMenuItem(
+                        child: Text(localizations.settings),
+                        onTap: () {
+                          // TODO: 설정 기능 구현
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: Text(localizations.showHiddenLists),
+                        onTap: () {
+                          // TODO: 숨겨진 목록 표시 기능 구현
+                        },
+                      ),
+                    ],
+                    elevation: 8.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  );
+                },
+              );
             },
           ),
         ],
