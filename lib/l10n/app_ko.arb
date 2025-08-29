@@ -32,5 +32,10 @@
   "countingType": "카운팅 타입",
   "editCounting": "카운트 수정",
   "settings": "설정",
-  "showHiddenLists": "숨겨진 목록 보기"
+  "showHiddenLists": "숨겨진 목록 보기",
+  "language": "언어",
+  "languageSettingTitle": "언어 설정",
+  "settingMenuTitle": "설정 메뉴",
+  "darkMode": "다크 모드",
+  "resetData": "데이터 초기화"
 }

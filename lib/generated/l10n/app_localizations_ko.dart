@@ -106,4 +106,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get showHiddenLists => '숨겨진 목록 보기';
+
+  @override
+  String get language => '언어';
+
+  @override
+  String get languageSettingTitle => '언어 설정';
+
+  @override
+  String get settingMenuTitle => '설정 메뉴';
+
+  @override
+  String get darkMode => '다크 모드';
+
+  @override
+  String get resetData => '데이터 초기화';
 }

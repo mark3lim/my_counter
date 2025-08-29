@@ -295,6 +295,36 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'숨겨진 목록 보기'**
   String get showHiddenLists;
+
+  /// No description provided for @language.
+  ///
+  /// In ko, this message translates to:
+  /// **'언어'**
+  String get language;
+
+  /// No description provided for @languageSettingTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'언어 설정'**
+  String get languageSettingTitle;
+
+  /// No description provided for @settingMenuTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'설정 메뉴'**
+  String get settingMenuTitle;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In ko, this message translates to:
+  /// **'다크 모드'**
+  String get darkMode;
+
+  /// No description provided for @resetData.
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터 초기화'**
+  String get resetData;
 }
 
 class _AppLocalizationsDelegate

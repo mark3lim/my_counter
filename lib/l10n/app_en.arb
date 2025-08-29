@@ -32,5 +32,10 @@
   "countingType": "Counting Type",
   "editCounting": "Edit Counting",
   "settings": "Settings",
-  "showHiddenLists": "Show hidden lists"
+  "showHiddenLists": "Show hidden lists",
+  "language": "Language",
+  "languageSettingTitle": "Language Settings",
+  "settingMenuTitle": "Setting Menu",
+  "darkMode": "Dark mode",
+  "resetData": "Reset data"
 }

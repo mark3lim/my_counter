@@ -106,4 +106,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showHiddenLists => 'Show hidden lists';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get languageSettingTitle => 'Language Settings';
+
+  @override
+  String get settingMenuTitle => 'Setting Menu';
+
+  @override
+  String get darkMode => 'Dark mode';
+
+  @override
+  String get resetData => 'Reset data';
 }

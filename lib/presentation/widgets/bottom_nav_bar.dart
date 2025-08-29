@@ -1,5 +1,6 @@
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
+import 'package:counting_app/presentation/views/settings_view.dart';
 import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -21,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SizedBox(
-      height: 80,
+      height: 86.0 + MediaQuery.of(context).padding.bottom,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -57,18 +58,40 @@ class BottomNavBar extends StatelessWidget {
                   final Offset offset = renderBox.localToGlobal(Offset.zero);
                   final Size size = renderBox.size;
 
-                                    showGeneralDialog(
+                  showGeneralDialog(
                     context: context,
                     barrierDismissible: true,
                     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                     barrierColor: Colors.transparent,
                     transitionDuration: const Duration(milliseconds: 200),
+                    transitionBuilder: (context, animation, secondaryAnimation, child) {
+                      final tween = Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(0, -0.1),
+                      );
+                      final curvedAnimation = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOut,
+                      );
+
+                      return SlideTransition(
+                        position: tween.animate(curvedAnimation),
+                        child: FadeTransition(
+                          opacity: curvedAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
                     pageBuilder: (context, animation, secondaryAnimation) {
                       return Stack(
                         children: [
                           Positioned(
-                            top: offset.dy - 110,
-                            left: offset.dx + size.width - 200,
+                            top: ((offset.dy - 32)
+                                  .clamp(8.0, MediaQuery.of(context).size.height - 100 - 8.0))
+                                  .toDouble(),
+                            left: ((offset.dx + size.width - 170)
+                                   .clamp(8.0, MediaQuery.of(context).size.width - 200 - 8.0))
+                                   .toDouble(),
                             child: Material(
                               color: Colors.transparent,
                               child: GlassmorphicContainer(
@@ -77,7 +100,7 @@ class BottomNavBar extends StatelessWidget {
                                 borderRadius: 15,
                                 blur: 20,
                                 alignment: Alignment.center,
-                                border: 1.5,
+                                border: 0.4,
                                 linearGradient: LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -100,10 +123,11 @@ class BottomNavBar extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
-                                      child: InkWell(
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
                                         onTap: () {
                                           Navigator.pop(context);
-                                          // TODO: 설정 기능 구현
+                                          Navigator.pushNamed(context, SettingsView.routeName);
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 20.0),
@@ -121,7 +145,8 @@ class BottomNavBar extends StatelessWidget {
                                       ),
                                     ),
                                     Expanded(
-                                      child: InkWell(
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
                                         onTap: () {
                                           Navigator.pop(context);
                                           // TODO: 숨겨진 목록 표시 기능 구현
