@@ -2,6 +2,7 @@ import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
 import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:glassmorphism/glassmorphism.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentPage;
@@ -56,32 +57,98 @@ class BottomNavBar extends StatelessWidget {
                   final Offset offset = renderBox.localToGlobal(Offset.zero);
                   final Size size = renderBox.size;
 
-                  showMenu(
+                                    showGeneralDialog(
                     context: context,
-                    position: RelativeRect.fromLTRB(
-                      offset.dx,
-                      offset.dy - 80, // 메뉴가 버튼 위에 나타나도록 오프셋 조정
-                      offset.dx + size.width,
-                      offset.dy,
-                    ),
-                    items: [
-                      PopupMenuItem(
-                        child: Text(localizations.settings),
-                        onTap: () {
-                          // TODO: 설정 기능 구현
-                        },
-                      ),
-                      PopupMenuItem(
-                        child: Text(localizations.showHiddenLists),
-                        onTap: () {
-                          // TODO: 숨겨진 목록 표시 기능 구현
-                        },
-                      ),
-                    ],
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
+                    barrierDismissible: true,
+                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                    barrierColor: Colors.transparent,
+                    transitionDuration: const Duration(milliseconds: 200),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return Stack(
+                        children: [
+                          Positioned(
+                            top: offset.dy - 110,
+                            left: offset.dx + size.width - 200,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: GlassmorphicContainer(
+                                width: 200,
+                                height: 100,
+                                borderRadius: 15,
+                                blur: 20,
+                                alignment: Alignment.center,
+                                border: 1.5,
+                                linearGradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.4).round()),
+                                    Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.3).round()),
+                                  ],
+                                  stops: const [0.1, 1],
+                                ),
+                                borderGradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Theme.of(context).colorScheme.outline.withAlpha((255 * 0.5).round()),
+                                    Theme.of(context).colorScheme.outline.withAlpha((255 * 0.2).round()),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          // TODO: 설정 기능 구현
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 20.0),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.settings, color: isDarkMode ? Colors.white : Colors.black),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                localizations.settings,
+                                                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          // TODO: 숨겨진 목록 표시 기능 구현
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 20.0),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.visibility, color: isDarkMode ? Colors.white : Colors.black),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                localizations.showHiddenLists,
+                                                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               );
