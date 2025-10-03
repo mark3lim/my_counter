@@ -1,26 +1,31 @@
 import 'dart:ui';
 import 'package:counting_app/data/model/category.dart';
-import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
-import 'package:counting_app/main/views/counting/edit_basic_counting_setting_view.dart';
 import 'package:counting_app/main/widgets/custom_app_next_bar.dart';
 import 'package:counting_app/main/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EditBasicCountingView extends StatefulWidget {
-  static const String routeName = '/edit_basic_counting';
+class UnifiedCountingView extends StatefulWidget {
+  static const String routeName = '/unified_counting';
 
-  final CategoryList categoryList;
+  final bool isEditMode;
+  final List<Category> initialCategories;
+  final Function(List<Category>) onSave;
 
-  const EditBasicCountingView({super.key, required this.categoryList});
+  const UnifiedCountingView({
+    super.key,
+    required this.isEditMode,
+    required this.initialCategories,
+    required this.onSave,
+  });
 
   @override
-  State<EditBasicCountingView> createState() => _EditBasicCountingViewState();
+  State<UnifiedCountingView> createState() => _UnifiedCountingViewState();
 }
 
-class _EditBasicCountingViewState extends State<EditBasicCountingView> {
+class _UnifiedCountingViewState extends State<UnifiedCountingView> {
   static const _inputCardMargin = EdgeInsets.fromLTRB(16, 12, 16, 12);
   static const _categoryItemCardMargin = EdgeInsets.symmetric(horizontal: 14, vertical: 12);
   static const double _kItemHeight = 76.0;
@@ -34,7 +39,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
   @override
   void initState() {
     super.initState();
-    _categories = List.from(widget.categoryList.categoryList);
+    _categories = List.from(widget.initialCategories);
   }
 
   void _toggleAddCategoryView() {
@@ -71,19 +76,9 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
     }
   }
 
-  void _navigateToSettings() {
-    Navigator.of(context).push<CategoryList>(
-      MaterialPageRoute(
-        builder: (context) => EditBasicCountingSettingView(
-          originalCategoryList: widget.categoryList,
-          categories: _categories,
-        ),
-      ),
-    ).then((updatedCategoryList) {
-      if (updatedCategoryList != null && mounted) {
-        Navigator.of(context).pop(updatedCategoryList);
-      }
-    });
+  void _saveAndNavigate() {
+    widget.onSave(_categories);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -96,11 +91,13 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppNextBar(
-        title: AppLocalizations.of(context)!.editCounting,
+        title: widget.isEditMode
+            ? AppLocalizations.of(context)!.editCounting
+            : AppLocalizations.of(context)!.newCounting,
         isNextEnabled: _categories.isNotEmpty,
         onNextPressed: () {
           if (_categories.isNotEmpty) {
-            _navigateToSettings();
+            _saveAndNavigate();
           }
         },
       ),
@@ -172,7 +169,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
                       onSubmitted: (_) => _addNewCategory(),
                       textInputAction: TextInputAction.done,
                       style: TextStyle(
-                          fontSize: 18.0,
+                        fontSize: 18.0,
                       ),
                     ),
                   ),
@@ -315,7 +312,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
-                                )
+                                ),
                               ),
                             ),
                             ReorderableDragStartListener(
