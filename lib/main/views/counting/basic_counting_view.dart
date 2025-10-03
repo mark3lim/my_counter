@@ -140,47 +140,61 @@ class BasicCountingView extends StatelessWidget {
   Widget _buildAddCategoryButton(BuildContext context, BasicCountingViewModel viewModel) {
     // 이 위젯은 카테고리 추가 입력 필드를 표시하는 버튼을 구성합니다.
     final isEnabled = !viewModel.isAddingCategory;
-    return SizedBox(
-      height: 76.0,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        child: Card(
-          color: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            side: BorderSide(
-              color: isEnabled ? Theme.of(context).colorScheme.outline : Colors.grey,
-              width: 1.0,
-            ),
-          ),
-          margin: EdgeInsets.zero,
-          child: InkWell(
-            onTap: isEnabled ? viewModel.toggleAddCategoryView : null,
-            borderRadius: BorderRadius.circular(30.0),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.addList,
-                    style: TextStyle(
-                      color: isEnabled ? Theme.of(context).textTheme.bodyLarge?.color : Colors.grey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 76.0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(
+                  color: isEnabled ? Theme.of(context).colorScheme.outline : Colors.grey,
+                  width: 1.0,
+                ),
+              ),
+              margin: EdgeInsets.zero,
+              child: InkWell(
+                onTap: isEnabled ? viewModel.toggleAddCategoryView : null,
+                borderRadius: BorderRadius.circular(30.0),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.addList,
+                        style: TextStyle(
+                          color: isEnabled ? Theme.of(context).textTheme.bodyLarge?.color : Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.add,
+                        color: isEnabled ? iconGreenColor : Colors.grey,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Icon(
-                    Icons.add,
-                    color: isEnabled ? iconGreenColor : Colors.grey,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            AppLocalizations.of(context)!.addCategoryHint,
+            style: const TextStyle(
+              fontSize: 14.0,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

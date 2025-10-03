@@ -126,6 +126,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noHiddenItems => '숨겨진 항목이 없습니다.';
 
   @override
+  String get addCategoryHint => '엔터키로 카테고리 추가 가능합니다';
+
+  @override
   String get language_ko => '한국어';
 
   @override

@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
@@ -194,47 +193,61 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
 
   Widget _buildAddCategoryButton() {
     final isEnabled = !_isAddingCategory;
-    return SizedBox(
-      height: _kItemHeight,
-      child: Padding(
-        padding: _inputCardMargin,
-        child: Card(
-          color: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(_cardBoarderRadius),
-            side: BorderSide(
-              color: isEnabled ? Theme.of(context).colorScheme.outline : Colors.grey,
-              width: 1.0,
-            ),
-          ),
-          margin: EdgeInsets.zero,
-          child: InkWell(
-            onTap: isEnabled ? _toggleAddCategoryView : null,
-            borderRadius: BorderRadius.circular(_cardBoarderRadius),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.addList,
-                    style: TextStyle(
-                        color: isEnabled ? Theme.of(context).textTheme.bodyLarge?.color : Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                    ),
+    return Column(
+      children: [
+        SizedBox(
+          height: _kItemHeight,
+          child: Padding(
+            padding: _inputCardMargin,
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_cardBoarderRadius),
+                side: BorderSide(
+                  color: isEnabled ? Theme.of(context).colorScheme.outline : Colors.grey,
+                  width: 1.0,
+                ),
+              ),
+              margin: EdgeInsets.zero,
+              child: InkWell(
+                onTap: isEnabled ? _toggleAddCategoryView : null,
+                borderRadius: BorderRadius.circular(_cardBoarderRadius),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.addList,
+                        style: TextStyle(
+                          color: isEnabled ? Theme.of(context).textTheme.bodyLarge?.color : Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.add,
+                        color: isEnabled ? iconGreenColor : Colors.grey,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Icon(
-                    Icons.add,
-                    color: isEnabled ? iconGreenColor : Colors.grey,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Text(
+            AppLocalizations.of(context)!.addCategoryHint,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

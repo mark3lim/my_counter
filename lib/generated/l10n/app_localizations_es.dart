@@ -128,6 +128,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noHiddenItems => 'No hay elementos ocultos';
 
   @override
+  String get addCategoryHint => 'Puedes agregar categorías con la tecla Enter';
+
+  @override
   String get language_ko => 'Coreano';
 
   @override

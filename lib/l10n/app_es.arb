@@ -39,6 +39,7 @@
   "darkMode": "Modo oscuro",
   "resetData": "Restablecer datos",
   "noHiddenItems": "No hay elementos ocultos",
+  "addCategoryHint": "Puedes agregar categorías con la tecla Enter",
   "language_ko": "Coreano",
   "language_en": "Inglés",
   "language_ja": "Japonés",

@@ -126,6 +126,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noHiddenItems => '隠されたアイテムはありません。';
 
   @override
+  String get addCategoryHint => 'Enterキーでカテゴリーを追加できます';
+
+  @override
   String get language_ko => '韓国語';
 
   @override

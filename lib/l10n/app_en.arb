@@ -39,6 +39,7 @@
   "darkMode": "Dark mode",
   "resetData": "Reset data",
   "noHiddenItems": "No hidden items",
+  "addCategoryHint": "You can add categories with the Enter key",
   "language_ko": "Korean",
   "language_en": "English",
   "language_ja": "Japanese",

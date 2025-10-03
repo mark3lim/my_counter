@@ -336,6 +336,12 @@ abstract class AppLocalizations {
   /// **'숨겨진 항목이 없습니다.'**
   String get noHiddenItems;
 
+  /// No description provided for @addCategoryHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'엔터키로 카테고리 추가 가능합니다'**
+  String get addCategoryHint;
+
   /// No description provided for @language_ko.
   ///
   /// In ko, this message translates to:
