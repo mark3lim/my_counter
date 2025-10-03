@@ -37,5 +37,6 @@
   "languageSettingTitle": "Language Settings",
   "settingMenuTitle": "Setting Menu",
   "darkMode": "Dark mode",
-  "resetData": "Reset data"
+  "resetData": "Reset data",
+  "noHiddenItems": "No hidden items"
 }

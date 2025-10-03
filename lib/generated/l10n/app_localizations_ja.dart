@@ -121,4 +121,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get resetData => 'データをリセット';
+
+  @override
+  String get noHiddenItems => '隠されたアイテムはありません。';
 }

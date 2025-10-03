@@ -123,4 +123,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get resetData => 'Restablecer datos';
+
+  @override
+  String get noHiddenItems => 'No hay elementos ocultos';
 }
