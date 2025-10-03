@@ -2,9 +2,9 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
-import 'package:counting_app/presentation/views/saved_basic_counting_detail_view.dart';
-import 'package:counting_app/presentation/widgets/counting_list_item.dart';
+import 'package:counting_app/main/utils/color_and_style_utils.dart';
+import 'package:counting_app/main/views/saved_basic_counting_detail_view.dart';
+import 'package:counting_app/main/widgets/counting_list_item.dart';
 import 'package:flutter/material.dart';
 
 class HiddenListsView extends StatefulWidget {

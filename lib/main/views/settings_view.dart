@@ -1,10 +1,10 @@
 import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
-import 'package:counting_app/presentation/views/language_selection_view.dart';
+import 'package:counting_app/main/utils/color_and_style_utils.dart';
+import 'package:counting_app/main/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:counting_app/presentation/views/home_view.dart'; // HomeView import 추가
+import 'package:counting_app/main/views/home_view.dart'; // HomeView import 추가
 
 class SettingsView extends ConsumerStatefulWidget {
   static const routeName = '/settings';

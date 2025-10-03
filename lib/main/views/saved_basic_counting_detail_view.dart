@@ -1,8 +1,8 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
-import 'package:counting_app/presentation/views/edit_basic_counting_view.dart';
+import 'package:counting_app/main/utils/color_and_style_utils.dart';
+import 'package:counting_app/main/views/edit_basic_counting_view.dart';
 import 'package:flutter/material.dart';
 
 // 저장된 카운팅 목록의 상세 화면을 표시하는 위젯입니다.

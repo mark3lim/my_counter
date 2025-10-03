@@ -1,6 +1,6 @@
 
 import 'package:counting_app/data/model/category_list.dart';
-import 'package:counting_app/presentation/widgets/counting_card.dart';
+import 'package:counting_app/main/widgets/counting_card.dart';
 import 'package:flutter/material.dart';
 
 class CountingListItem extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/presentation/views/basic_counting_view.dart';
-import 'package:counting_app/presentation/views/hidden_lists_view.dart';
-import 'package:counting_app/presentation/views/settings_view.dart';
-import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
+import 'package:counting_app/main/views/basic_counting_view.dart';
+import 'package:counting_app/main/views/hidden_lists_view.dart';
+import 'package:counting_app/main/views/settings_view.dart';
+import 'package:counting_app/main/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 
