@@ -335,6 +335,30 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'숨겨진 항목이 없습니다.'**
   String get noHiddenItems;
+
+  /// No description provided for @language_ko.
+  ///
+  /// In ko, this message translates to:
+  /// **'한국어'**
+  String get language_ko;
+
+  /// No description provided for @language_en.
+  ///
+  /// In ko, this message translates to:
+  /// **'영어'**
+  String get language_en;
+
+  /// No description provided for @language_ja.
+  ///
+  /// In ko, this message translates to:
+  /// **'일본어'**
+  String get language_ja;
+
+  /// No description provided for @language_es.
+  ///
+  /// In ko, this message translates to:
+  /// **'스페인어'**
+  String get language_es;
 }
 
 class _AppLocalizationsDelegate

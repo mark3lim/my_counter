@@ -126,4 +126,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noHiddenItems => 'No hay elementos ocultos';
+
+  @override
+  String get language_ko => 'Coreano';
+
+  @override
+  String get language_en => 'Inglés';
+
+  @override
+  String get language_ja => 'Japonés';
+
+  @override
+  String get language_es => 'Español';
 }

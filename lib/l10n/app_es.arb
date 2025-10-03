@@ -38,5 +38,9 @@
   "settingMenuTitle": "Menú de configuración",
   "darkMode": "Modo oscuro",
   "resetData": "Restablecer datos",
-  "noHiddenItems": "No hay elementos ocultos"
+  "noHiddenItems": "No hay elementos ocultos",
+  "language_ko": "Coreano",
+  "language_en": "Inglés",
+  "language_ja": "Japonés",
+  "language_es": "Español"
 }

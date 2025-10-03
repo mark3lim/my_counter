@@ -1,32 +1,34 @@
+import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsView extends StatefulWidget {
+class SettingsView extends ConsumerStatefulWidget {
   static const routeName = '/settings';
 
   const SettingsView({super.key});
 
   @override
-  State<SettingsView> createState() => _SettingsViewState();
+  ConsumerState<SettingsView> createState() => _SettingsViewState();
 }
 
-class _SettingsViewState extends State<SettingsView> {
+class _SettingsViewState extends ConsumerState<SettingsView> {
   bool _isDarkMode = false;
-  String _selectedLanguage = '한국어';
 
-  Future<void> _navigateAndSelectLanguage(BuildContext context) async {
-    final result = await Navigator.pushNamed<String>(
-      context, 
-      LanguageSelectionView.routeName
-      );
-
-    if (!mounted) return;
-    if (result != null && result.isNotEmpty) {
-      setState(() {
-        _selectedLanguage = result;
-      });
+  String _getLanguageName(String languageCode) {
+    switch (languageCode) {
+      case 'ko':
+        return '한국어';
+      case 'en':
+        return 'English';
+      case 'ja':
+        return '日本語';
+      case 'es':
+        return 'Español';
+      default:
+        return 'English';
     }
   }
 
@@ -35,6 +37,9 @@ class _SettingsViewState extends State<SettingsView> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final textColor = isDarkMode ? Colors.white : onBackgroundColor;
+    final selectedLocale = ref.watch(localeProvider);
+    final selectedLanguage =
+        _getLanguageName(selectedLocale?.languageCode ?? 'en');
 
     return Scaffold(
       appBar: AppBar(
@@ -84,7 +89,7 @@ class _SettingsViewState extends State<SettingsView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  _selectedLanguage,
+                  selectedLanguage,
                   style: TextStyle(
                     color: isDarkMode ? Colors.white : onBackgroundColor,
                     fontSize: 16.0,
@@ -95,7 +100,7 @@ class _SettingsViewState extends State<SettingsView> {
               ],
             ),
             onTap: () {
-              _navigateAndSelectLanguage(context);
+              Navigator.pushNamed(context, LanguageSelectionView.routeName);
             },
           ),
           ListTile(

@@ -38,5 +38,9 @@
   "settingMenuTitle": "設定メニュー",
   "darkMode": "ダークモード",
   "resetData": "データをリセット",
-  "noHiddenItems": "隠されたアイテムはありません。"
+  "noHiddenItems": "隠されたアイテムはありません。",
+  "language_ko": "韓国語",
+  "language_en": "英語",
+  "language_ja": "日本語",
+  "language_es": "スペイン語"
 }

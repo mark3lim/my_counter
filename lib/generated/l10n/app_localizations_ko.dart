@@ -124,4 +124,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noHiddenItems => '숨겨진 항목이 없습니다.';
+
+  @override
+  String get language_ko => '한국어';
+
+  @override
+  String get language_en => '영어';
+
+  @override
+  String get language_ja => '일본어';
+
+  @override
+  String get language_es => '스페인어';
 }

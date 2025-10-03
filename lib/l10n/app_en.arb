@@ -38,5 +38,9 @@
   "settingMenuTitle": "Setting Menu",
   "darkMode": "Dark mode",
   "resetData": "Reset data",
-  "noHiddenItems": "No hidden items"
+  "noHiddenItems": "No hidden items",
+  "language_ko": "Korean",
+  "language_en": "English",
+  "language_ja": "Japanese",
+  "language_es": "Spanish"
 }

@@ -158,9 +158,11 @@ class BottomNavBar extends StatelessWidget {
                                             children: [
                                               Icon(Icons.visibility, color: isDarkMode ? Colors.white : Colors.black),
                                               const SizedBox(width: 10),
-                                              Text(
-                                                localizations.showHiddenLists,
-                                                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                                              Expanded(
+                                                child: Text(
+                                                  localizations.showHiddenLists,
+                                                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                                                ),
                                               ),
                                             ],
                                           ),

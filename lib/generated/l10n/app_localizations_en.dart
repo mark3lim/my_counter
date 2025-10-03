@@ -124,4 +124,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noHiddenItems => 'No hidden items';
+
+  @override
+  String get language_ko => 'Korean';
+
+  @override
+  String get language_en => 'English';
+
+  @override
+  String get language_ja => 'Japanese';
+
+  @override
+  String get language_es => 'Spanish';
 }
