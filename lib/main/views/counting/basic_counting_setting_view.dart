@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';

@@ -1,11 +1,10 @@
 
 import 'dart:ui';
-
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
-import 'package:counting_app/main/views/edit_basic_counting_setting_view.dart';
+import 'package:counting_app/main/views/counting/edit_basic_counting_setting_view.dart';
 import 'package:counting_app/main/widgets/custom_app_next_bar.dart';
 import 'package:counting_app/main/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
