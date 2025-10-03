@@ -121,4 +121,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get resetData => '데이터 초기화';
+
+  @override
+  String get noHiddenItems => '숨겨진 항목이 없습니다.';
 }

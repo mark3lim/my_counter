@@ -329,6 +329,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'데이터 초기화'**
   String get resetData;
+
+  /// No description provided for @noHiddenItems.
+  ///
+  /// In ko, this message translates to:
+  /// **'숨겨진 항목이 없습니다.'**
+  String get noHiddenItems;
 }
 
 class _AppLocalizationsDelegate

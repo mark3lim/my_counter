@@ -1,6 +1,7 @@
 import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
+import 'package:counting_app/presentation/views/hidden_lists_view.dart';
 import 'package:counting_app/presentation/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,6 +64,8 @@ class MyApp extends ConsumerWidget {
             return MaterialPageRoute(settings: settings, builder: (context) => const SettingsView());
           case LanguageSelectionView.routeName:
             return MaterialPageRoute<String>(settings: settings, builder: (context) => const LanguageSelectionView());
+          case HiddenListsView.routeName:
+            return MaterialPageRoute(settings: settings, builder: (context) => const HiddenListsView());
           default:
             // Handle unknown routes, maybe navigate to a default screen
             return MaterialPageRoute(settings: settings, builder: (context) => const HomeView());

@@ -37,5 +37,6 @@
   "languageSettingTitle": "言語設定",
   "settingMenuTitle": "設定メニュー",
   "darkMode": "ダークモード",
-  "resetData": "データをリセット"
+  "resetData": "データをリセット",
+  "noHiddenItems": "隠されたアイテムはありません。"
 }

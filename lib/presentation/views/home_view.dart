@@ -4,6 +4,7 @@ import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
 import 'package:counting_app/presentation/views/calendar_home_page.dart';
 import 'package:counting_app/presentation/views/saved_basic_counting_detail_view.dart';
+import 'package:counting_app/presentation/widgets/counting_list_item.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/counting_card.dart';
@@ -51,8 +52,8 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _loadCategoryLists() async {
     try {
       final fetched = await _repository.getAllCategoryLists();
-      // 최근 수정된 순서로 정렬 (원본 변조 방지를 위해 복사본 사용)
-      final lists = List<CategoryList>.of(fetched)
+      // isHidden이 true가 아닌 항목만 필터링하고, 최근 수정된 순서로 정렬
+      final lists = fetched.where((list) => list.isHidden == false).toList()
         ..sort((a, b) => b.modifyDate.compareTo(a.modifyDate));
       if (!mounted) return;
       setState(() {
@@ -76,34 +77,6 @@ class _HomeViewState extends State<HomeView> {
     );
     // 상세 화면에서 돌아오면 목록을 다시 불러와 최신 상태를 반영합니다.
     _loadCategoryLists();
-  }
-
-  IconData _getIconForCycleType(String? cycleType) {
-    switch (cycleType) {
-      case 'general':
-        return Icons.list_alt;
-      case 'daily':
-        return Icons.today;
-      case 'weekly':
-        return Icons.view_week;
-      case 'monthly':
-        return Icons.calendar_today;
-      default:
-        return Icons.list_alt;
-    }
-  }
-  
-  Color _getColorForCycleType(String? cycleType) {
-    switch (cycleType) {
-      case 'general':
-        return Color(0xFFD0E4FF);
-      case 'daily':
-      case 'weekly':
-      case 'monthly':
-        return Color(0xFFBCC5E7);
-      default:
-        return Color(0xFFC9CCD1);
-    }
   }
 
   @override
@@ -241,15 +214,9 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                          child: CountingCard(
-                            text: categoryList.name,
-                            textAlign: TextAlign.left,
-                            onTap: () => _navigateToDetail(categoryList),
-                            icon: _getIconForCycleType(categoryList.cycleType),
-                            backgroundColor: _getColorForCycleType(categoryList.cycleType),
-                          ),
+                        child: CountingListItem(
+                          categoryList: categoryList,
+                          onTap: () => _navigateToDetail(categoryList),
                         ),
                       );
                     },

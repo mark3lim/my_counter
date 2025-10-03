@@ -37,5 +37,6 @@
   "languageSettingTitle": "언어 설정",
   "settingMenuTitle": "설정 메뉴",
   "darkMode": "다크 모드",
-  "resetData": "데이터 초기화"
+  "resetData": "데이터 초기화",
+  "noHiddenItems": "숨겨진 항목이 없습니다."
 }

@@ -1,5 +1,6 @@
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
+import 'package:counting_app/presentation/views/hidden_lists_view.dart';
 import 'package:counting_app/presentation/views/settings_view.dart';
 import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +150,7 @@ class BottomNavBar extends StatelessWidget {
                                         behavior: HitTestBehavior.opaque,
                                         onTap: () {
                                           Navigator.pop(context);
-                                          // TODO: 숨겨진 목록 표시 기능 구현
+                                          Navigator.pushNamed(context, HiddenListsView.routeName);
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 20.0),
