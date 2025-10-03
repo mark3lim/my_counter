@@ -1,6 +1,7 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/views/basic_counting_view.dart';
 import 'package:counting_app/presentation/views/calendar_home_page.dart';
 import 'package:counting_app/presentation/views/saved_basic_counting_detail_view.dart';
@@ -89,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
         titleTextStyle: TextStyle(
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.white
-                : Colors.black,
+                : onBackgroundColor,
             fontWeight: FontWeight.bold,
             fontSize: 20.0),
       ),
@@ -191,7 +192,7 @@ class _HomeViewState extends State<HomeView> {
                           }
                         },
                         background: Container(
-                          color: Colors.red,
+                          color: errorColor,
                           padding:
                               const EdgeInsets.symmetric(horizontal: 20),
                           alignment: Alignment.centerRight,

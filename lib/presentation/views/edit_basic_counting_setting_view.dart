@@ -5,6 +5,7 @@ import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/widgets/custom_app_save_bar.dart';
 import 'package:counting_app/presentation/views/home_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -167,7 +168,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
       appBar: CustomAppSaveBar(
         title: AppLocalizations.of(context)!.detailSetting,
         onSavePressed: _onSave,
-        saveButtonTextColor: _isNameEmpty ? Colors.grey.shade400 : Colors.black,
+        saveButtonTextColor: _isNameEmpty ? Colors.grey.shade400 : onBackgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -231,7 +232,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           decoration: BoxDecoration(
-            color: const Color(0xB2A0AFB7),
+            color: glassmorphismColor,
             borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
           ),
           child: Row(
@@ -245,7 +246,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
               Expanded(
                 child: TextField(
                   controller: controller,
-                  style: const TextStyle(color: Colors.black),
+                  style: const TextStyle(color: onBackgroundColor),
                   decoration: InputDecoration(
                     hintText: hintText,
                     hintStyle: TextStyle(color: Colors.black54),
@@ -279,7 +280,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             decoration: BoxDecoration(
-              color: const Color(0xB2A0AFB7),
+              color: glassmorphismColor,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -290,7 +291,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
                 ),
                 Text(
                   selectedLabel,
-                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                  style: const TextStyle(color: onBackgroundColor, fontSize: 16),
                 ),
               ],
             ),
@@ -314,7 +315,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           decoration: BoxDecoration(
-            color: const Color(0xB2A0AFB7),
+            color: glassmorphismColor,
             borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
           ),
           child: Row(
@@ -328,7 +329,7 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
               Switch(
                 value: value,
                 onChanged: onChanged,
-                activeTrackColor: Colors.blueAccent,
+                activeTrackColor: primaryColor,
                 activeThumbColor: Colors.white,
                 inactiveTrackColor: Colors.white,
               ),

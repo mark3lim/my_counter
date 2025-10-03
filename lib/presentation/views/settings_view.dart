@@ -1,4 +1,5 @@
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
-    final textColor = isDarkMode ? Colors.white : Colors.black;
+    final textColor = isDarkMode ? Colors.white : onBackgroundColor;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,9 +65,9 @@ class _SettingsViewState extends State<SettingsView> {
                   // TODO: Implement theme change logic
                 });
               },
-              activeThumbColor: Color(0xFF5478E4),
+              activeThumbColor: switchActiveColor,
               inactiveThumbColor: Colors.white,
-              inactiveTrackColor: Color(0xFFE0E0E0),
+              inactiveTrackColor: switchInactiveTrackColor,
               trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
             ),
           ),
@@ -85,7 +86,7 @@ class _SettingsViewState extends State<SettingsView> {
                 Text(
                   _selectedLanguage,
                   style: TextStyle(
-                    color: isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : onBackgroundColor,
                     fontSize: 16.0,
                   ),
                 ),
@@ -100,7 +101,7 @@ class _SettingsViewState extends State<SettingsView> {
           ListTile(
             title: Text(
               l10n.resetData,
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: errorColor),
             ),
             onTap: () {
               // TODO: Implement data reset dialog

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/views/basic_counting_setting_view.dart';
 import 'package:counting_app/presentation/widgets/custom_app_next_bar.dart';
 import 'package:counting_app/presentation/widgets/glass_icon_button.dart';
@@ -203,7 +204,7 @@ class _BasicCountingViewState extends State<BasicCountingView> {
             GlassIconButton(
               onPressed: _toggleAddCategoryView,
               icon: Icons.remove,
-              iconColor: const Color(0xFFF44336),
+              iconColor: iconRedColor,
             ),
           ],
         ),
@@ -248,7 +249,7 @@ class _BasicCountingViewState extends State<BasicCountingView> {
                   const SizedBox(width: 6),
                   Icon(
                     Icons.add,
-                    color: isEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+                    color: isEnabled ? iconGreenColor : Colors.grey,
                   ),
                 ],
               ),
@@ -277,7 +278,7 @@ class _BasicCountingViewState extends State<BasicCountingView> {
         },
         background: Container(
           // 스와이프하여 삭제할 때 나타나는 배경 UI입니다.
-          color: Colors.red,
+          color: errorColor,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.symmetric(horizontal: _edgeInsetsHorizontal),
           child: Row(

@@ -1,6 +1,7 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:counting_app/presentation/views/edit_basic_counting_view.dart';
 import 'package:flutter/material.dart';
 
@@ -72,7 +73,14 @@ class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailV
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentCategoryList.name),
+        title: Text(
+          _currentCategoryList.name,
+          style: const TextStyle(
+            color: onBackgroundColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 20
+            ),
+          ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -97,7 +105,7 @@ class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailV
           final category = _currentCategoryList.categoryList[index];
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Color(0xFFEEEEEE),
+            color: cardBackgroundColor,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 12, 8, 12),
               child: Row(
@@ -122,7 +130,7 @@ class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailV
                         child: IconButton(
                           icon: const Icon(
                             Icons.remove_circle_outline,
-                            color: Color(0XFFDC3545),
+                            color: dangerColor,
                           ),
                           onPressed: () => _updateCategoryValue(index, -1),
                         ),
@@ -142,7 +150,7 @@ class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailV
                         child: IconButton(
                           icon: const Icon(
                             Icons.add_circle_outline,
-                            color: Color(0xFF198754),
+                            color: successColor,
                           ),
                           onPressed: () => _updateCategoryValue(index, 1),
                         ),

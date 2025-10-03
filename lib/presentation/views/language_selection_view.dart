@@ -1,5 +1,6 @@
 import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
+import 'package:counting_app/presentation/utils/color_and_style_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ class LanguageSelectionView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedLocale = ref.watch(localeProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDarkMode ? Colors.white : Colors.black;
+    final textColor = isDarkMode ? Colors.white : onBackgroundColor;
 
     return Scaffold(
       appBar: AppBar(
