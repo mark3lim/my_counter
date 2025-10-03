@@ -2,8 +2,7 @@ import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
-import 'package:counting_app/main/views/counting/basic_counting_view.dart';
-import 'package:counting_app/main/views/counting/saved_basic_counting_detail_view.dart';
+import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 import 'package:counting_app/main/views/home/calendar_home_page.dart';
 import 'package:counting_app/main/widgets/bottom_nav_bar.dart';
 import 'package:counting_app/main/widgets/counting_card.dart';
@@ -73,10 +72,9 @@ class _HomeViewState extends State<HomeView> {
   void _navigateToDetail(CategoryList categoryList) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SavedBasicCountingDetailView(categoryList: categoryList),
+        builder: (context) => CombinedCountingView(categoryList: categoryList),
       ),
     );
-    // 상세 화면에서 돌아오면 목록을 다시 불러와 최신 상태를 반영합니다.
     _loadCategoryLists();
   }
 
@@ -116,7 +114,12 @@ class _HomeViewState extends State<HomeView> {
                   text: localizations.addNewCounting,
                   textAlign: TextAlign.left,
                   onTap: () =>
-                      Navigator.pushNamed(context, BasicCountingView.routeName),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CombinedCountingView(),
+                        ),
+                      ),
                   icon: Icons.mode_edit,
                 ),
               ],
@@ -131,94 +134,9 @@ class _HomeViewState extends State<HomeView> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final categoryList = _categoryLists[index];
-                      return Dismissible(
-                        key: Key(categoryList.id),
-                        direction: DismissDirection.endToStart,
-                        // 삭제 확인 다이얼로그를 표시합니다.
-                        confirmDismiss: (direction) async {
-                          final bool? confirmed = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(localizations.checkDeleteTitle),
-                                content: Text(
-                                    "'${categoryList.name} ${localizations.checkDeleteMessage}'"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(localizations.cancel),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                  ),
-                                  TextButton(
-                                    child: Text(localizations.delete),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                          return confirmed;
-                        },
-                        // 다이얼로그에서 '삭제'를 선택한 경우에만 호출됩니다.
-                        onDismissed: (direction) async {
-                          final index = _categoryLists.indexOf(categoryList);
-                          final item = _categoryLists[index];
-                          final scaffoldMessenger = ScaffoldMessenger.of(context);
-                          final loc = AppLocalizations.of(context)!;
-
-                          setState(() {
-                            _categoryLists.removeAt(index);
-                          });
-
-                          try {
-                            await _repository.deleteCategoryList(item.id);
-                          } catch (e) {
-                            setState(() {
-                              _categoryLists.insert(index, item);
-                            });
-
-                            if (mounted) {
-                              scaffoldMessenger.showSnackBar(
-                                SnackBar(
-                                  content: Text(loc.deleteFailedMessage),
-                                  action: SnackBarAction(
-                                    label: loc.okayBtn,
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        background: Container(
-                          color: errorColor,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 20),
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.delete,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              const Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        child: CountingListItem(
-                          categoryList: categoryList,
-                          onTap: () => _navigateToDetail(categoryList),
-                        ),
+                      return CountingListItem(
+                        categoryList: categoryList,
+                        onTap: () => _navigateToDetail(categoryList),
                       );
                     },
                     childCount: _categoryLists.length,

@@ -1,9 +1,9 @@
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
-import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:counting_app/main/viewmodels/saved_basic_counting_detail_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 
 // 저장된 카운팅 목록의 상세 화면을 표시하는 위젯입니다.
 class SavedBasicCountingDetailView extends StatelessWidget {
@@ -37,7 +37,7 @@ class SavedBasicCountingDetailView extends StatelessWidget {
                   onPressed: () async {
                     final result = await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => EditBasicCountingView(categoryList: viewModel.currentCategoryList),
+                        builder: (context) => CombinedCountingView(categoryList: viewModel.currentCategoryList),
                       ),
                     );
                     if (result != null && result is CategoryList) {

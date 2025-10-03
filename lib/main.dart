@@ -1,6 +1,6 @@
 import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/main/views/counting/basic_counting_view.dart';
+import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 import 'package:counting_app/main/views/home/home_view.dart';
 import 'package:counting_app/main/views/settings/hidden_lists_view.dart';
 import 'package:counting_app/main/views/settings/language_selection_view.dart';
@@ -58,8 +58,8 @@ class MyApp extends ConsumerWidget {
         switch (settings.name) {
           case HomeView.routeName:
             return MaterialPageRoute(settings: settings, builder: (context) => const HomeView());
-          case BasicCountingView.routeName:
-            return MaterialPageRoute(settings: settings, builder: (context) => const BasicCountingView());
+          case CombinedCountingView.routeName:
+            return MaterialPageRoute(settings: settings, builder: (context) => const CombinedCountingView());
           case SettingsView.routeName:
             return MaterialPageRoute(settings: settings, builder: (context) => const SettingsView());
           case LanguageSelectionView.routeName:

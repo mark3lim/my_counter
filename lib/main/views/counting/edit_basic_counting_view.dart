@@ -9,18 +9,18 @@ import 'package:counting_app/main/widgets/glass_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EditBasicCountingView extends StatefulWidget {
-  static const String routeName = '/edit_basic_counting';
+class CombinedCountingView extends StatefulWidget {
+  static const String routeName = '/combined_counting';
 
-  final CategoryList categoryList;
+  final CategoryList? categoryList;
 
-  const EditBasicCountingView({super.key, required this.categoryList});
+  const CombinedCountingView({super.key, this.categoryList});
 
   @override
-  State<EditBasicCountingView> createState() => _EditBasicCountingViewState();
+  State<CombinedCountingView> createState() => _CombinedCountingViewState();
 }
 
-class _EditBasicCountingViewState extends State<EditBasicCountingView> {
+class _CombinedCountingViewState extends State<CombinedCountingView> {
   static const _inputCardMargin = EdgeInsets.fromLTRB(16, 12, 16, 12);
   static const _categoryItemCardMargin = EdgeInsets.symmetric(horizontal: 14, vertical: 12);
   static const double _kItemHeight = 76.0;
@@ -34,7 +34,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
   @override
   void initState() {
     super.initState();
-    _categories = List.from(widget.categoryList.categoryList);
+    _categories = widget.categoryList?.categoryList ?? [];
   }
 
   void _toggleAddCategoryView() {
@@ -62,7 +62,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
       setState(() {
         _categories.add(Category(
           name: name,
-          value: 0, // Default value for new category
+          value: 0,
           order: _categories.length,
         ));
         _isAddingCategory = false;
@@ -72,16 +72,20 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
   }
 
   void _navigateToSettings() {
-    Navigator.of(context).push<CategoryList>(
+    Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditBasicCountingSettingView(
+        builder: (context) => CombinedCountingSettingView(
           originalCategoryList: widget.categoryList,
           categories: _categories,
         ),
       ),
-    ).then((updatedCategoryList) {
-      if (updatedCategoryList != null && mounted) {
-        Navigator.of(context).pop(updatedCategoryList);
+    ).then((result) {
+      if (result != null && result is Map<String, int>) {
+        setState(() {
+          for (var category in _categories) {
+            category.value = result['initialValue'] ?? category.value;
+          }
+        });
       }
     });
   }
@@ -96,7 +100,9 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppNextBar(
-        title: AppLocalizations.of(context)!.editCounting,
+        title: widget.categoryList == null
+            ? AppLocalizations.of(context)!.newCounting
+            : AppLocalizations.of(context)!.editCounting,
         isNextEnabled: _categories.isNotEmpty,
         onNextPressed: () {
           if (_categories.isNotEmpty) {
@@ -172,7 +178,7 @@ class _EditBasicCountingViewState extends State<EditBasicCountingView> {
                       onSubmitted: (_) => _addNewCategory(),
                       textInputAction: TextInputAction.done,
                       style: TextStyle(
-                          fontSize: 18.0,
+                        fontSize: 18.0,
                       ),
                     ),
                   ),

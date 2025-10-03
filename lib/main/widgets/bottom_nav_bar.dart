@@ -1,5 +1,5 @@
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/main/views/counting/basic_counting_view.dart';
+import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 import 'package:counting_app/main/views/settings/hidden_lists_view.dart';
 import 'package:counting_app/main/views/settings/settings_view.dart';
 import 'package:counting_app/main/widgets/glass_icon_button.dart';
@@ -32,7 +32,7 @@ class BottomNavBar extends StatelessWidget {
             icon: Icons.add_circle,
             iconColor: isDarkMode ? Colors.white : Colors.black,
             onPressed: () {
-              Navigator.pushNamed(context, BasicCountingView.routeName);
+              Navigator.pushNamed(context, CombinedCountingView.routeName);
             },
           ),
           // 페이지를 나타내는 점

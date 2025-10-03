@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
@@ -11,21 +10,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EditBasicCountingSettingView extends StatefulWidget {
-  final CategoryList originalCategoryList;
+class CombinedCountingSettingView extends StatefulWidget {
+  final CategoryList? originalCategoryList;
   final List<Category> categories;
 
-  const EditBasicCountingSettingView({
+  const CombinedCountingSettingView({
     super.key,
-    required this.originalCategoryList,
+    this.originalCategoryList,
     required this.categories,
   });
 
   @override
-  State<EditBasicCountingSettingView> createState() => _EditBasicCountingSettingViewState();
+  State<CombinedCountingSettingView> createState() => _CombinedCountingSettingViewState();
 }
 
-class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingView> {
+class _CombinedCountingSettingViewState extends State<CombinedCountingSettingView> {
   late TextEditingController _nameController;
   late final CountingRepository _repository;
   late bool _allowNegative;
@@ -45,11 +44,13 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.originalCategoryList.name);
-    _allowNegative = widget.originalCategoryList.useNegativeNum;
-    _isHidden = widget.originalCategoryList.isHidden;
-    _selectedCycleValue = widget.originalCategoryList.cycleType;
-    _isForAnalyze = widget.originalCategoryList.isForAnalyze;
+    _nameController = TextEditingController(
+      text: widget.originalCategoryList?.name ?? '',
+    );
+    _allowNegative = widget.originalCategoryList?.useNegativeNum ?? false;
+    _isHidden = widget.originalCategoryList?.isHidden ?? false;
+    _selectedCycleValue = widget.originalCategoryList?.cycleType ?? 'general';
+    _isForAnalyze = widget.originalCategoryList?.isForAnalyze ?? false;
     _isNameEmpty = _nameController.text.trim().isEmpty;
     _nameController.addListener(() {
       final isEmpty = _nameController.text.trim().isEmpty;
@@ -97,7 +98,10 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
     });
 
     try {
-      final isNameExists = await _repository.isNameExists(name, excludeId: widget.originalCategoryList.id);
+      final isNameExists = await _repository.isNameExists(
+        name,
+        excludeId: widget.originalCategoryList?.id,
+      );
       if (isNameExists) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -107,20 +111,36 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
         return;
       }
 
-      final updatedCategoryList = widget.originalCategoryList.copyWith(
-        name: name,
-        categoryList: List.unmodifiable(widget.categories),
-        modifyDate: DateTime.now(),
-        useNegativeNum: _allowNegative,
-        isHidden: _isHidden,
-        cycleType: _selectedCycleValue,
-        isForAnalyze: _isForAnalyze,
-      );
+      final updatedCategoryList = widget.originalCategoryList?.copyWith(
+            name: name,
+            categoryList: List.unmodifiable(widget.categories),
+            modifyDate: DateTime.now(),
+            useNegativeNum: _allowNegative,
+            isHidden: _isHidden,
+            cycleType: _selectedCycleValue,
+            isForAnalyze: _isForAnalyze,
+          ) ??
+          CategoryList(
+            name: name,
+            categoryList: List.unmodifiable(widget.categories),
+            modifyDate: DateTime.now(),
+            useNegativeNum: _allowNegative,
+            isHidden: _isHidden,
+            cycleType: _selectedCycleValue,
+            isForAnalyze: _isForAnalyze,
+          );
 
-      await _repository.updateCategoryList(updatedCategoryList);
+      if (widget.originalCategoryList != null) {
+        await _repository.updateCategoryList(updatedCategoryList);
+      } else {
+        await _repository.addCategoryList(updatedCategoryList);
+      }
 
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil(HomeView.routeName, (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeView.routeName,
+          (route) => false,
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -138,7 +158,9 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
   }
 
   void _showCyclePicker() {
-    final selectedIndex = _cycleData.indexWhere((element) => element['value'] == _selectedCycleValue);
+    final selectedIndex = _cycleData.indexWhere(
+      (element) => element['value'] == _selectedCycleValue,
+    );
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -165,7 +187,9 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppSaveBar(
-        title: AppLocalizations.of(context)!.detailSetting,
+        title: widget.originalCategoryList == null
+            ? AppLocalizations.of(context)!.detailSetting
+            : AppLocalizations.of(context)!.editCounting,
         onSavePressed: _onSave,
         saveButtonTextColor: _isNameEmpty ? Colors.grey.shade400 : onBackgroundColor,
       ),
@@ -225,14 +249,20 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
     double bottomRadius = 20.0,
   }) {
     return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(topRadius),
+        bottom: Radius.circular(bottomRadius),
+      ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           decoration: BoxDecoration(
             color: glassmorphismColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(topRadius),
+              bottom: Radius.circular(bottomRadius),
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,9 +299,14 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
     double topRadius = 20.0,
     double bottomRadius = 20.0,
   }) {
-    final selectedLabel = _cycleData.firstWhere((element) => element['value'] == _selectedCycleValue)['label']!;
+    final selectedLabel = _cycleData.firstWhere(
+      (element) => element['value'] == _selectedCycleValue,
+    )['label']!;
     return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(topRadius),
+        bottom: Radius.circular(bottomRadius),
+      ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: GestureDetector(
@@ -308,14 +343,20 @@ class _EditBasicCountingSettingViewState extends State<EditBasicCountingSettingV
     double bottomRadius = 20.0,
   }) {
     return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(topRadius),
+        bottom: Radius.circular(bottomRadius),
+      ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           decoration: BoxDecoration(
             color: glassmorphismColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius), bottom: Radius.circular(bottomRadius)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(topRadius),
+              bottom: Radius.circular(bottomRadius),
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

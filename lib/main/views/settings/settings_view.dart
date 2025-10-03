@@ -17,7 +17,6 @@ class SettingsView extends ConsumerStatefulWidget {
 
 class _SettingsViewState extends ConsumerState<SettingsView> {
   bool _isDarkMode = false;
-  bool _languageChanged = false; // 언어 변경 여부를 추적하는 플래그
 
   String _getLanguageName(String languageCode) {
     switch (languageCode) {
@@ -45,19 +44,14 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) {
-        if (didPop) {
-          return;
-        }
-        if (_languageChanged) {
-          // 언어가 변경되었으면 HomeView로 돌아갈 때 스택을 모두 지움
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) {
+          Navigator.of(context).pop();
+        } else {
           Navigator.of(context).pushNamedAndRemoveUntil(
             HomeView.routeName,
             (route) => false,
           );
-        } else {
-          // 언어가 변경되지 않았으면 단순히 이전 화면으로 돌아감
-          Navigator.of(context).pop();
         }
       },
       child: Scaffold(
@@ -124,9 +118,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                 );
                 if (result == true) {
                   // LanguageSelectionView에서 true를 반환하면 언어가 변경된 것임
-                  setState(() {
-                    _languageChanged = true;
-                  });
+                  setState(() {});
                 }
               },
             ),
