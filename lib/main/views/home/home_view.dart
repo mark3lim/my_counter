@@ -3,12 +3,12 @@ import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
 import 'package:counting_app/main/views/basic_counting_view.dart';
-import 'package:counting_app/main/views/calendar_home_page.dart';
+import 'package:counting_app/main/views/home/calendar_home_page.dart';
 import 'package:counting_app/main/views/saved_basic_counting_detail_view.dart';
+import 'package:counting_app/main/widgets/bottom_nav_bar.dart';
+import 'package:counting_app/main/widgets/counting_card.dart';
 import 'package:counting_app/main/widgets/counting_list_item.dart';
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_bar.dart';
-import '../widgets/counting_card.dart';
 
 // 홈 화면을 표시하는 상태를 가진 위젯입니다.
 class HomeView extends StatefulWidget {
