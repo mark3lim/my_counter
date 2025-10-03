@@ -1,12 +1,12 @@
 import 'package:counting_app/application/providers/locale_provider.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
-import 'package:counting_app/presentation/views/basic_counting_view.dart';
-import 'package:counting_app/presentation/views/hidden_lists_view.dart';
-import 'package:counting_app/presentation/views/language_selection_view.dart';
+import 'package:counting_app/main/views/basic_counting_view.dart';
+import 'package:counting_app/main/views/hidden_lists_view.dart';
+import 'package:counting_app/main/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:counting_app/presentation/views/home_view.dart';
-import 'package:counting_app/presentation/views/settings_view.dart';
+import 'package:counting_app/main/views/home_view.dart';
+import 'package:counting_app/main/views/settings_view.dart';
 
 /// 앱의 진입점입니다.
 void main() {
