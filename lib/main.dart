@@ -63,7 +63,7 @@ class MyApp extends ConsumerWidget {
           case SettingsView.routeName:
             return MaterialPageRoute(settings: settings, builder: (context) => const SettingsView());
           case LanguageSelectionView.routeName:
-            return MaterialPageRoute<String>(settings: settings, builder: (context) => const LanguageSelectionView());
+            return MaterialPageRoute<bool>(settings: settings, builder: (context) => const LanguageSelectionView());
           case HiddenListsView.routeName:
             return MaterialPageRoute(settings: settings, builder: (context) => const HiddenListsView());
           default:

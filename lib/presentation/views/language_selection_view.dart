@@ -35,7 +35,7 @@ class LanguageSelectionView extends ConsumerWidget {
                 : null,
             onTap: () {
               ref.read(localeProvider.notifier).state = const Locale('ko');
-              Navigator.pop(context);
+              Navigator.pop(context, true); // 언어 변경됨
             },
           ),
           // 영어
@@ -46,7 +46,7 @@ class LanguageSelectionView extends ConsumerWidget {
                 : null,
             onTap: () {
               ref.read(localeProvider.notifier).state = const Locale('en');
-              Navigator.pop(context);
+              Navigator.pop(context, true); // 언어 변경됨
             },
           ),
           // 일본어
@@ -57,7 +57,7 @@ class LanguageSelectionView extends ConsumerWidget {
                 : null,
             onTap: () {
               ref.read(localeProvider.notifier).state = const Locale('ja');
-              Navigator.pop(context);
+              Navigator.pop(context, true); // 언어 변경됨
             },
           ),
           // 스페인어
@@ -68,7 +68,7 @@ class LanguageSelectionView extends ConsumerWidget {
                 : null,
             onTap: () {
               ref.read(localeProvider.notifier).state = const Locale('es');
-              Navigator.pop(context);
+              Navigator.pop(context, true); // 언어 변경됨
             },
           ),
         ],
