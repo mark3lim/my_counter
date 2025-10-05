@@ -77,14 +77,39 @@ class _HiddenListsViewState extends State<HiddenListsView> {
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final categoryList = _hiddenLists[index];
-                        return CountingListItem(
-                          categoryList: categoryList,
-                          onTap: () => _navigateToDetail(categoryList),
-                        );
-                      },
-                      childCount: _hiddenLists.length,
+                        (context, index) {
+                          final categoryList = _hiddenLists[index];
+                          return Dismissible(
+                            key: ValueKey(categoryList.id),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            onDismissed: (direction) async {
+                              setState(() {
+                                _hiddenLists.removeAt(index);
+                              });
+                              try {
+                                await _repository.deleteCategoryList(categoryList.id);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(localizations.delete)),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(localizations.dataLoadingErrorMessage)),
+                                );
+                              }
+                            },
+                            child: CountingListItem(
+                              categoryList: categoryList,
+                              onTap: () => _navigateToDetail(categoryList),
+                            ),
+                          );
+                        },
+                        childCount: _hiddenLists.length,
                     ),
                   ),
                 ),
