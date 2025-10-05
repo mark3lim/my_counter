@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:counting_app/core/error/data_number_limit_error.dart';
+import 'package:counting_app/core/error/id_exist_error.dart';
 import 'package:counting_app/data/model/category.dart';
 import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
@@ -21,10 +23,12 @@ class CombinedCountingSettingView extends StatefulWidget {
   });
 
   @override
-  State<CombinedCountingSettingView> createState() => _CombinedCountingSettingViewState();
+  State<CombinedCountingSettingView> createState() =>
+      _CombinedCountingSettingViewState();
 }
 
-class _CombinedCountingSettingViewState extends State<CombinedCountingSettingView> {
+class _CombinedCountingSettingViewState
+    extends State<CombinedCountingSettingView> {
   late TextEditingController _nameController;
   late final CountingRepository _repository;
   late bool _allowNegative;
@@ -83,8 +87,8 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
     super.dispose();
   }
 
-  void _onSave() async {
-    if (_isSaving) return;
+  Future<void> _onSave() async {
+    if (_isSaving || !mounted) return;
 
     final name = _nameController.text.trim();
     if (name.isEmpty) {
@@ -111,7 +115,8 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
         return;
       }
 
-      final updatedCategoryList = widget.originalCategoryList?.copyWith(
+      final updatedCategoryList =
+          widget.originalCategoryList?.copyWith(
             name: name,
             categoryList: List.unmodifiable(widget.categories),
             modifyDate: DateTime.now(),
@@ -137,15 +142,47 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
       }
 
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeView.routeName,
-          (route) => false,
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(HomeView.routeName, (route) => false);
+      }
+    } on IdExistError {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.listExists,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Colors.redAccent,
+
+          ),
+        );
+      }
+    } on DataNumberLimitError {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.dataNumberLimitError,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Colors.redAccent,
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.saveFailedMessage)),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.saveFailedMessage),
+          ),
         );
       }
     } finally {
@@ -168,7 +205,9 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
           height: 250,
           child: CupertinoPicker(
             itemExtent: 32.0,
-            scrollController: FixedExtentScrollController(initialItem: selectedIndex),
+            scrollController: FixedExtentScrollController(
+              initialItem: selectedIndex,
+            ),
             onSelectedItemChanged: (int index) {
               setState(() {
                 _selectedCycleValue = _cycleData[index]['value']!;
@@ -191,7 +230,9 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
             ? AppLocalizations.of(context)!.detailSetting
             : AppLocalizations.of(context)!.editCounting,
         onSavePressed: _onSave,
-        saveButtonTextColor: _isNameEmpty ? Colors.grey.shade400 : onBackgroundColor,
+        saveButtonTextColor: _isNameEmpty
+            ? Colors.grey.shade400
+            : onBackgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -267,10 +308,7 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                label,
-                style: commonTextStyle,
-              ),
+              Text(label, style: commonTextStyle),
               const SizedBox(width: 16),
               Expanded(
                 child: TextField(
@@ -283,9 +321,7 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
                   ),
                   textAlign: TextAlign.end,
                   keyboardType: TextInputType.text,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(24),
-                  ],
+                  inputFormatters: [LengthLimitingTextInputFormatter(24)],
                 ),
               ),
             ],
@@ -312,10 +348,11 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
         child: GestureDetector(
           onTap: _showCyclePicker,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            decoration: BoxDecoration(
-              color: glassmorphismColor,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
             ),
+            decoration: BoxDecoration(color: glassmorphismColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -325,7 +362,10 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
                 ),
                 Text(
                   selectedLabel,
-                  style: const TextStyle(color: onBackgroundColor, fontSize: 16),
+                  style: const TextStyle(
+                    color: onBackgroundColor,
+                    fontSize: 16,
+                  ),
                 ),
               ],
             ),
@@ -361,10 +401,7 @@ class _CombinedCountingSettingViewState extends State<CombinedCountingSettingVie
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                label,
-                style: commonTextStyle,
-              ),
+              Text(label, style: commonTextStyle),
               const Spacer(),
               Switch(
                 value: value,

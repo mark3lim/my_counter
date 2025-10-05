@@ -43,5 +43,6 @@
   "language_ko": "Korean",
   "language_en": "English",
   "language_ja": "Japanese",
-  "language_es": "Spanish"
+  "language_es": "Spanish",
+  "dataNumberLimitError": "Only up to 100 categories can be saved."
 }

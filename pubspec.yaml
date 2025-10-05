@@ -40,8 +40,9 @@ dependencies:
   crypto: ^3.0.6
   intl: any
   uuid: ^4.5.1
-  shared_preferences: ^2.5.3
-  synchronized: ^3.4.0
+  shared_preferences: ^2.3.0
+  synchronized: ^3.1.0
+  path_provider: ^2.1.1
   provider: ^6.1.5+1
 
 dev_dependencies:

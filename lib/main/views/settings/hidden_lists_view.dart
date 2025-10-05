@@ -44,7 +44,8 @@ class _HiddenListsViewState extends State<HiddenListsView> {
     }
   }
 
-  void _navigateToDetail(CategoryList categoryList) async {
+  Future<void> _navigateToDetail(CategoryList categoryList) async {
+    if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SavedBasicCountingDetailView(categoryList: categoryList),
@@ -88,18 +89,59 @@ class _HiddenListsViewState extends State<HiddenListsView> {
                               padding: const EdgeInsets.only(right: 20.0),
                               child: const Icon(Icons.delete, color: Colors.white),
                             ),
+                            confirmDismiss: (direction) async {
+                              if (!mounted) return false;
+                              
+                              // BuildContext 관련 값들을 미리 캡처
+                              final dialogContext = context;
+                              final checkTitle = localizations.checkDeleteTitle;
+                              final checkMessage = localizations.checkDeleteMessage;
+                              final cancelText = localizations.cancel;
+                              final deleteText = localizations.delete;
+                              
+                              return await showDialog<bool>(
+                                context: dialogContext,
+                                builder: (context) => AlertDialog(
+                                  title: Text(checkTitle),
+                                  content: Text(checkMessage),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: Text(cancelText),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                      child: Text(deleteText),
+                                    ),
+                                  ],
+                                ),
+                              ) ?? false;
+                            },
                             onDismissed: (direction) async {
+                              // BuildContext 캡처
+                              final scaffoldMessenger = ScaffoldMessenger.of(context);
+                              final errorMessage = localizations.dataLoadingErrorMessage;
+                              
+                              // 원본 데이터 보관 (복원용)
+                              final deletedItem = categoryList;
+                              final deletedIndex = index;
+
                               setState(() {
                                 _hiddenLists.removeAt(index);
                               });
+                              
                               try {
                                 await _repository.deleteCategoryList(categoryList.id);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(localizations.delete)),
-                                );
+                                if (!mounted) return;
+                                
                               } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(localizations.dataLoadingErrorMessage)),
+                                if (!mounted) return;
+                                // 삭제 실패 시 항목 복원
+                                setState(() {
+                                  _hiddenLists.insert(deletedIndex, deletedItem);
+                                });
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(content: Text(errorMessage)),
                                 );
                               }
                             },

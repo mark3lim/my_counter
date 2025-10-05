@@ -365,6 +365,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'스페인어'**
   String get language_es;
+
+  /// No description provided for @dataNumberLimitError.
+  ///
+  /// In ko, this message translates to:
+  /// **'카테고리는 최대 100개까지만 저장할 수 있습니다.'**
+  String get dataNumberLimitError;
 }
 
 class _AppLocalizationsDelegate

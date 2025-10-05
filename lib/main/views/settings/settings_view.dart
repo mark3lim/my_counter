@@ -113,9 +113,11 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                 ],
               ),
               onTap: () async {
+                if (!mounted) return;
                 final result = await Navigator.of(context).pushNamed(
                   LanguageSelectionView.routeName,
                 );
+                if (!mounted) return;
                 if (result == true) {
                   // LanguageSelectionView에서 true를 반환하면 언어가 변경된 것임
                   setState(() {});

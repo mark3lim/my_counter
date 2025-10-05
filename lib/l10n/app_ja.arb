@@ -43,5 +43,6 @@
   "language_ko": "韓国語",
   "language_en": "英語",
   "language_ja": "日本語",
-  "language_es": "スペイン語"
+  "language_es": "スペイン語",
+  "dataNumberLimitError": "カテゴリーは最大100個まで保存できます。"
 }

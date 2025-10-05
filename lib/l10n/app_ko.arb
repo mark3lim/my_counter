@@ -43,5 +43,6 @@
   "language_ko": "한국어",
   "language_en": "영어",
   "language_ja": "일본어",
-  "language_es": "스페인어"
+  "language_es": "스페인어",
+  "dataNumberLimitError": "카테고리는 최대 100개까지만 저장할 수 있습니다."
 }

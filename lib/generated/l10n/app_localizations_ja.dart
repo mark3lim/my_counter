@@ -139,4 +139,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get language_es => 'スペイン語';
+
+  @override
+  String get dataNumberLimitError => 'カテゴリーは最大100個まで保存できます。';
 }

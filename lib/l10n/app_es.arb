@@ -43,5 +43,6 @@
   "language_ko": "Coreano",
   "language_en": "Inglés",
   "language_ja": "Japonés",
-  "language_es": "Español"
+  "language_es": "Español",
+  "dataNumberLimitError": "Solo se pueden guardar hasta 100 categorías."
 }

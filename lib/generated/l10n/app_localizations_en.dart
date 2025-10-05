@@ -139,4 +139,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get language_es => 'Spanish';
+
+  @override
+  String get dataNumberLimitError => 'Only up to 100 categories can be saved.';
 }

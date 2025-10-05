@@ -139,4 +139,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get language_es => '스페인어';
+
+  @override
+  String get dataNumberLimitError => '카테고리는 최대 100개까지만 저장할 수 있습니다.';
 }

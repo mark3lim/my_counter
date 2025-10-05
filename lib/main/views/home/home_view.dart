@@ -69,12 +69,14 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // 상세 화면으로 이동하고, 돌아왔을 때 목록을 새로고침하는 함수입니다.
-  void _navigateToDetail(CategoryList categoryList) async {
+  Future<void> _navigateToDetail(CategoryList categoryList) async {
+    if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SavedBasicCountingDetailView(categoryList: categoryList),
       ),
     );
+    if (!mounted) return;
     _loadCategoryLists();
   }
 
@@ -162,6 +164,10 @@ return Dismissible(
     child: const Icon(Icons.delete, color: Colors.white),
   ),
   onDismissed: (direction) async {
+    // BuildContext 캡처
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final deleteFailedMessage = localizations.deleteFailedMessage;
+    
     // 원본 데이터 보관 (복원용)
     final deletedItem = categoryList;
     final deletedIndex = index;
@@ -171,17 +177,17 @@ return Dismissible(
     });
     try {
       await _repository.deleteCategoryList(categoryList.id);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(localizations.delete)),
-      );
+      if (!mounted) return;
+      
     } catch (e) {
+      if (!mounted) return;
       // 삭제 실패 시 항목 복원
       setState(() {
         _categoryLists.insert(deletedIndex, deletedItem);
       });
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
-          content: Text(localizations.deleteFailedMessage),
+          content: Text(deleteFailedMessage),
           action: SnackBarAction(
             label: '확인',
             onPressed: () {},
@@ -191,23 +197,32 @@ return Dismissible(
     }
   },
   confirmDismiss: (direction) async {
+    if (!mounted) return false;
+    
+    // BuildContext 관련 값들을 미리 캡처
+    final dialogContext = context;
+    final checkTitle = localizations.checkDeleteTitle;
+    final checkMessage = localizations.checkDeleteMessage;
+    final cancelText = localizations.cancel;
+    final deleteText = localizations.delete;
+    
     return await showDialog<bool>(
-      context: context,
+      context: dialogContext,
       builder: (context) => AlertDialog(
-        title: Text(localizations.checkDeleteTitle),
-        content: Text(localizations.checkDeleteMessage),
+        title: Text(checkTitle),
+        content: Text(checkMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text(localizations.cancel ?? '취소'),
+            child: Text(cancelText),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(localizations.delete),
+            child: Text(deleteText),
           ),
         ],
       ),
-    );
+    ) ?? false;
   },
   child: CountingListItem(
     categoryList: categoryList,

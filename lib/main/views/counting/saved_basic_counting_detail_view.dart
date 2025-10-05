@@ -6,17 +6,22 @@ import 'package:provider/provider.dart';
 import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
 
 // 저장된 카운팅 목록의 상세 화면을 표시하는 위젯입니다.
-class SavedBasicCountingDetailView extends StatelessWidget {
+class SavedBasicCountingDetailView extends StatefulWidget {
   final CategoryList categoryList;
 
   const SavedBasicCountingDetailView({super.key, required this.categoryList});
 
   @override
+  State<SavedBasicCountingDetailView> createState() => _SavedBasicCountingDetailViewState();
+}
+
+class _SavedBasicCountingDetailViewState extends State<SavedBasicCountingDetailView> {
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) {
         final viewModel = SavedBasicCountingDetailViewModel();
-        viewModel.initialize(categoryList);
+        viewModel.initialize(widget.categoryList);
         return viewModel;
       },
       child: Consumer<SavedBasicCountingDetailViewModel>(
@@ -35,6 +40,7 @@ class SavedBasicCountingDetailView extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () async {
+                    if (!mounted) return;
                     final result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => CombinedCountingView(categoryList: viewModel.currentCategoryList),
