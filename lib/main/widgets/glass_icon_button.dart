@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:glassmorphism/glassmorphism.dart';
 
 class GlassIconButton extends StatelessWidget {
   final IconData icon;
@@ -24,30 +23,15 @@ class GlassIconButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       customBorder: const CircleBorder(),
-      child: GlassmorphicContainer(
+      child: Container(
         width: width,
         height: height,
-        borderRadius: borderRadius,
-        blur: 15,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(color: Colors.transparent, width: 0),
+        ),
         alignment: Alignment.center,
-        border: 0.0,
-        linearGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.3).round()),
-            Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.2).round()),
-          ],
-          stops: const [0.1, 1],
-        ),
-        borderGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.outline.withAlpha((255 * 0.4).round()),
-            Theme.of(context).colorScheme.outline.withAlpha((255 * 0.1).round()),
-          ],
-        ),
         child: Icon(
           icon,
           color: iconColor,

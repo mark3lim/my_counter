@@ -2,7 +2,7 @@ import 'package:counting_app/data/model/category_list.dart';
 import 'package:counting_app/data/repositories/counting_repository.dart';
 import 'package:counting_app/generated/l10n/app_localizations.dart';
 import 'package:counting_app/main/utils/color_and_style_utils.dart';
-import 'package:counting_app/main/views/counting/edit_basic_counting_view.dart';
+import 'package:counting_app/main/views/counting/saved_basic_counting_detail_view.dart';
 import 'package:counting_app/main/views/home/calendar_home_page.dart';
 import 'package:counting_app/main/widgets/bottom_nav_bar.dart';
 import 'package:counting_app/main/widgets/counting_card.dart';
@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
   void _navigateToDetail(CategoryList categoryList) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CombinedCountingView(categoryList: categoryList),
+        builder: (context) => SavedBasicCountingDetailView(categoryList: categoryList),
       ),
     );
     _loadCategoryLists();
@@ -99,7 +99,16 @@ class _HomeViewState extends State<HomeView> {
           const CalendarHomePage(),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(currentPage: _currentPage),
+      bottomNavigationBar: BottomNavBar(
+        currentPage: _currentPage,
+        onPageSelected: (page) {
+          _pageController.animateToPage(
+            page,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.ease,
+          );
+        },
+      ),
     );
   }
 
@@ -117,7 +126,17 @@ class _HomeViewState extends State<HomeView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CombinedCountingView(),
+                          builder: (context) => SavedBasicCountingDetailView(
+                            categoryList: CategoryList(
+                              id: '',
+                              name: '',
+                              cycleType: '',
+                              categoryList: [],
+                              isHidden: false,
+                              modifyDate: DateTime.now(),
+                              useNegativeNum: false,
+                            ),
+                          ),
                         ),
                       ),
                   icon: Icons.mode_edit,
@@ -127,17 +146,74 @@ class _HomeViewState extends State<HomeView> {
           )
         : CustomScrollView(
             slivers: [
-              // 저장된 카테고리 목록을 동적으로 표시합니다.
               SliverPadding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final categoryList = _categoryLists[index];
-                      return CountingListItem(
-                        categoryList: categoryList,
-                        onTap: () => _navigateToDetail(categoryList),
-                      );
+return Dismissible(
+  key: ValueKey(categoryList.id),
+  direction: DismissDirection.endToStart,
+  background: Container(
+    color: Colors.red,
+    alignment: Alignment.centerRight,
+    padding: const EdgeInsets.only(right: 20.0),
+    child: const Icon(Icons.delete, color: Colors.white),
+  ),
+  onDismissed: (direction) async {
+    // 원본 데이터 보관 (복원용)
+    final deletedItem = categoryList;
+    final deletedIndex = index;
+
+    setState(() {
+      _categoryLists.removeAt(index);
+    });
+    try {
+      await _repository.deleteCategoryList(categoryList.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(localizations.delete)),
+      );
+    } catch (e) {
+      // 삭제 실패 시 항목 복원
+      setState(() {
+        _categoryLists.insert(deletedIndex, deletedItem);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(localizations.deleteFailedMessage),
+          action: SnackBarAction(
+            label: '확인',
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
+  },
+  confirmDismiss: (direction) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(localizations.checkDeleteTitle),
+        content: Text(localizations.checkDeleteMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(localizations.cancel ?? '취소'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(localizations.delete),
+          ),
+        ],
+      ),
+    );
+  },
+  child: CountingListItem(
+    categoryList: categoryList,
+    onTap: () => _navigateToDetail(categoryList),
+  ),
+);
                     },
                     childCount: _categoryLists.length,
                   ),

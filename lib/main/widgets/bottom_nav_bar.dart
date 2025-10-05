@@ -8,9 +8,10 @@ import 'package:glassmorphism/glassmorphism.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentPage;
+  final void Function(int)? onPageSelected;
 
   // 하단 네비게이션 바 위젯입니다.
-  const BottomNavBar({super.key, required this.currentPage});
+  const BottomNavBar({super.key, required this.currentPage, this.onPageSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -28,159 +29,232 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           // 햄버거 아이콘 버튼 (팝업 메뉴 기능 적용)
-          GlassIconButton(
-            icon: Icons.add_circle,
-            iconColor: isDarkMode ? Colors.white : Colors.black,
-            onPressed: () {
-              Navigator.pushNamed(context, CombinedCountingView.routeName);
-            },
-          ),
-          // 페이지를 나타내는 점
-          Row(
-            children: List.generate(2, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Icon(
-                  Icons.circle,
-                  size: 8,
-                  color: currentPage == index ? Theme.of(context).colorScheme.primary : Colors.grey,
+          GlassmorphicContainer(
+            width: 180,
+            height: 54,
+            borderRadius: 28,
+            blur: 20,
+            alignment: Alignment.center,
+            border: 0.0,
+            linearGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.6).round()),
+                Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.5).round()),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+            borderGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).colorScheme.outline.withAlpha((255 * 0.4).round()),
+                Theme.of(context).colorScheme.outline.withAlpha((255 * 0.1).round()),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 카테고리 추가 버튼
+                GlassIconButton(
+                  icon: Icons.add_circle,
+                  iconColor: isDarkMode ? Colors.white : Colors.black54,
+                  onPressed: () {
+                    Navigator.pushNamed(context, CombinedCountingView.routeName);
+                  },
                 ),
-              );
-            }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  // 홈 버튼
+                  child: GlassIconButton(
+                    icon: Icons.format_list_bulleted_rounded,
+                    iconColor: currentPage == 0 ? Colors.black : Colors.grey,
+                    onPressed: () {
+                      if (onPageSelected != null) {
+                        onPageSelected!(0);
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  // 캘린더 버튼
+                  child: GlassIconButton(
+                    icon: Icons.calendar_today,
+                    iconColor: currentPage == 1 ? Colors.black : Colors.grey,
+                    onPressed: () {
+                      if (onPageSelected != null) {
+                        onPageSelected!(1);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           // 설정 아이콘 버튼 (리퀴드 글래스 효과 적용)
-          Builder(
-            builder: (context) {
-              return GlassIconButton(
-                icon: Icons.settings,
-                iconColor: isDarkMode ? Colors.white : Colors.black,
-                onPressed: () {
-                  final RenderBox renderBox = context.findRenderObject() as RenderBox;
-                  final Offset offset = renderBox.localToGlobal(Offset.zero);
-                  final Size size = renderBox.size;
+          GlassmorphicContainer(
+            width: 54,
+            height: 54,
+            borderRadius: 28,
+            blur: 20,
+            alignment: Alignment.center,
+            border: 0.0,
+            linearGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.6).round()),
+                Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.5).round()),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+            borderGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).colorScheme.outline.withAlpha((255 * 0.4).round()),
+                Theme.of(context).colorScheme.outline.withAlpha((255 * 0.1).round()),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+            child: Builder(
+              builder: (context) {
+                return GlassIconButton(
+                  icon: Icons.settings,
+                  iconColor: isDarkMode ? Colors.white : Colors.black,
+                  onPressed: () {
+                    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+                    final Offset offset = renderBox.localToGlobal(Offset.zero);
+                    final Size size = renderBox.size;
 
-                  showGeneralDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                    barrierColor: Colors.transparent,
-                    transitionDuration: const Duration(milliseconds: 200),
-                    transitionBuilder: (context, animation, secondaryAnimation, child) {
-                      final tween = Tween<Offset>(
-                        begin: Offset.zero,
-                        end: const Offset(0, -0.1),
-                      );
-                      final curvedAnimation = CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeOut,
-                      );
+                    showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      barrierColor: Colors.transparent,
+                      transitionDuration: const Duration(milliseconds: 200),
+                      transitionBuilder: (context, animation, secondaryAnimation, child) {
+                        final tween = Tween<Offset>(
+                          begin: Offset.zero,
+                          end: const Offset(0, -0.1),
+                        );
+                        final curvedAnimation = CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOut,
+                        );
 
-                      return SlideTransition(
-                        position: tween.animate(curvedAnimation),
-                        child: FadeTransition(
-                          opacity: curvedAnimation,
-                          child: child,
-                        ),
-                      );
-                    },
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return Stack(
-                        children: [
-                          Positioned(
-                            top: ((offset.dy - 32)
-                                  .clamp(8.0, MediaQuery.of(context).size.height - 100 - 8.0))
-                                  .toDouble(),
-                            left: ((offset.dx + size.width - 170)
-                                   .clamp(8.0, MediaQuery.of(context).size.width - 200 - 8.0))
-                                   .toDouble(),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: GlassmorphicContainer(
-                                width: 200,
-                                height: 100,
-                                borderRadius: 15,
-                                blur: 20,
-                                alignment: Alignment.center,
-                                border: 0.4,
-                                linearGradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.4).round()),
-                                    Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.3).round()),
-                                  ],
-                                  stops: const [0.1, 1],
-                                ),
-                                borderGradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Theme.of(context).colorScheme.outline.withAlpha((255 * 0.5).round()),
-                                    Theme.of(context).colorScheme.outline.withAlpha((255 * 0.2).round()),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          Navigator.pushNamed(context, SettingsView.routeName);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 20.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.settings, color: isDarkMode ? Colors.white : Colors.black),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                localizations.settings,
-                                                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          Navigator.pushNamed(context, HiddenListsView.routeName);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 20.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.visibility, color: isDarkMode ? Colors.white : Colors.black),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child: Text(
-                                                  localizations.showHiddenLists,
+                        return SlideTransition(
+                          position: tween.animate(curvedAnimation),
+                          child: FadeTransition(
+                            opacity: curvedAnimation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return Stack(
+                          children: [
+                            Positioned(
+                              top: ((offset.dy - 32)
+                                    .clamp(8.0, MediaQuery.of(context).size.height - 100 - 8.0))
+                                    .toDouble(),
+                              left: ((offset.dx + size.width - 170)
+                                     .clamp(8.0, MediaQuery.of(context).size.width - 200 - 8.0))
+                                     .toDouble(),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: GlassmorphicContainer(
+                                  width: 200,
+                                  height: 100,
+                                  borderRadius: 15,
+                                  blur: 20,
+                                  alignment: Alignment.center,
+                                  border: 0.4,
+                                  linearGradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.6).round()),
+                                      Theme.of(context).colorScheme.surfaceContainer.withAlpha((255 * 0.5).round()),
+                                    ],
+                                    stops: const [0.0, 1.0],
+                                  ),
+                                  borderGradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Theme.of(context).colorScheme.outline.withAlpha((255 * 0.4).round()),
+                                      Theme.of(context).colorScheme.outline.withAlpha((255 * 0.1).round()),
+                                    ],
+                                    stops: const [0.0, 1.0],
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(context, SettingsView.routeName);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 20.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.settings, color: isDarkMode ? Colors.white : Colors.black),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  localizations.settings,
                                                   style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(context, HiddenListsView.routeName);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 20.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.visibility, color: isDarkMode ? Colors.white : Colors.black),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                  child: Text(
+                                                    localizations.showHiddenLists,
+                                                    style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
-            },
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
