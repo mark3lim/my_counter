@@ -7,9 +7,12 @@ import 'package:counting_app/main/views/settings/language_selection_view.dart';
 import 'package:counting_app/main/views/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 /// 앱의 진입점입니다.
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting();
   // Riverpod을 사용하기 위해 ProviderScope로 앱을 감싸줍니다.
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -19,7 +22,6 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   /// 이 위젯은 애플리케이션의 루트입니다.
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
@@ -67,7 +69,7 @@ class MyApp extends ConsumerWidget {
           case HiddenListsView.routeName:
             return MaterialPageRoute(settings: settings, builder: (context) => const HiddenListsView());
           default:
-            // Handle unknown routes, maybe navigate to a default screen
+            // 알 수 없는 라우트를 처리하고, 기본 화면으로 이동할 수 있습니다.
             return MaterialPageRoute(settings: settings, builder: (context) => const HomeView());
         }
       },

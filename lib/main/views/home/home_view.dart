@@ -63,7 +63,9 @@ class _HomeViewState extends State<HomeView> {
       if (!mounted) return;
       // 에러 처리: 스낵바나 다이얼로그로 사용자에게 알림
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.dataLoadingErrorMessage)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.dataLoadingErrorMessage),
+        ),
       );
     }
   }
@@ -73,7 +75,8 @@ class _HomeViewState extends State<HomeView> {
     if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SavedBasicCountingDetailView(categoryList: categoryList),
+        builder: (context) =>
+            SavedBasicCountingDetailView(categoryList: categoryList),
       ),
     );
     if (!mounted) return;
@@ -86,13 +89,15 @@ class _HomeViewState extends State<HomeView> {
     // 화면의 기본 구조를 설정합니다.
     return Scaffold(
       appBar: AppBar(
+        leading: null, // Remove the default back button
         title: Text(localizations.appTitle),
         titleTextStyle: TextStyle(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white
-                : onBackgroundColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 20.0),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : onBackgroundColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+        ),
       ),
       body: PageView(
         controller: _pageController,
@@ -114,33 +119,38 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildHomeContent(BuildContext context, AppLocalizations localizations) {
+  Widget _buildHomeContent(
+    BuildContext context,
+    AppLocalizations localizations,
+  ) {
     return _categoryLists.isEmpty
         ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 24.0,
+            ),
             child: Column(
               children: [
                 const SizedBox(height: 8),
                 CountingCard(
                   text: localizations.addNewCounting,
                   textAlign: TextAlign.left,
-                  onTap: () =>
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SavedBasicCountingDetailView(
-                            categoryList: CategoryList(
-                              id: '',
-                              name: '',
-                              cycleType: '',
-                              categoryList: [],
-                              isHidden: false,
-                              modifyDate: DateTime.now(),
-                              useNegativeNum: false,
-                            ),
-                          ),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SavedBasicCountingDetailView(
+                        categoryList: CategoryList(
+                          id: '',
+                          name: '',
+                          cycleType: '',
+                          categoryList: [],
+                          isHidden: false,
+                          modifyDate: DateTime.now(),
+                          useNegativeNum: false,
                         ),
                       ),
+                    ),
+                  ),
                   icon: Icons.mode_edit,
                 ),
               ],
@@ -151,87 +161,87 @@ class _HomeViewState extends State<HomeView> {
               SliverPadding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final categoryList = _categoryLists[index];
-return Dismissible(
-  key: ValueKey(categoryList.id),
-  direction: DismissDirection.endToStart,
-  background: Container(
-    color: Colors.red,
-    alignment: Alignment.centerRight,
-    padding: const EdgeInsets.only(right: 20.0),
-    child: const Icon(Icons.delete, color: Colors.white),
-  ),
-  onDismissed: (direction) async {
-    // BuildContext 캡처
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final deleteFailedMessage = localizations.deleteFailedMessage;
-    
-    // 원본 데이터 보관 (복원용)
-    final deletedItem = categoryList;
-    final deletedIndex = index;
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final categoryList = _categoryLists[index];
+                    return Dismissible(
+                      key: ValueKey(categoryList.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      onDismissed: (direction) async {
+                        // BuildContext 캡처
+                        final scaffoldMessenger = ScaffoldMessenger.of(context);
+                        final deleteFailedMessage =
+                            localizations.deleteFailedMessage;
 
-    setState(() {
-      _categoryLists.removeAt(index);
-    });
-    try {
-      await _repository.deleteCategoryList(categoryList.id);
-      if (!mounted) return;
-      
-    } catch (e) {
-      if (!mounted) return;
-      // 삭제 실패 시 항목 복원
-      setState(() {
-        _categoryLists.insert(deletedIndex, deletedItem);
-      });
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(deleteFailedMessage),
-          action: SnackBarAction(
-            label: '확인',
-            onPressed: () {},
-          ),
-        ),
-      );
-    }
-  },
-  confirmDismiss: (direction) async {
-    if (!mounted) return false;
-    
-    // BuildContext 관련 값들을 미리 캡처
-    final dialogContext = context;
-    final checkTitle = localizations.checkDeleteTitle;
-    final checkMessage = localizations.checkDeleteMessage;
-    final cancelText = localizations.cancel;
-    final deleteText = localizations.delete;
-    
-    return await showDialog<bool>(
-      context: dialogContext,
-      builder: (context) => AlertDialog(
-        title: Text(checkTitle),
-        content: Text(checkMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(cancelText),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(deleteText),
-          ),
-        ],
-      ),
-    ) ?? false;
-  },
-  child: CountingListItem(
-    categoryList: categoryList,
-    onTap: () => _navigateToDetail(categoryList),
-  ),
-);
-                    },
-                    childCount: _categoryLists.length,
-                  ),
+                        // 원본 데이터 보관 (복원용)
+                        final deletedItem = categoryList;
+                        final deletedIndex = index;
+
+                        setState(() {
+                          _categoryLists.removeAt(index);
+                        });
+                        try {
+                          await _repository.deleteCategoryList(categoryList.id);
+                          if (!mounted) return;
+                        } catch (e) {
+                          if (!mounted) return;
+                          // 삭제 실패 시 항목 복원
+                          setState(() {
+                            _categoryLists.insert(deletedIndex, deletedItem);
+                          });
+                          scaffoldMessenger.showSnackBar(
+                            SnackBar(
+                              content: Text(deleteFailedMessage),
+                              action: SnackBarAction(
+                                label: '확인',
+                                onPressed: () {},
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      confirmDismiss: (direction) async {
+                        if (!mounted) return false;
+
+                        // BuildContext 관련 값들을 미리 캡처
+                        final dialogContext = context;
+                        final checkTitle = localizations.checkDeleteTitle;
+                        final checkMessage = localizations.checkDeleteMessage;
+                        final cancelText = localizations.cancel;
+                        final deleteText = localizations.delete;
+
+                        return await showDialog<bool>(
+                              context: dialogContext,
+                              builder: (context) => AlertDialog(
+                                title: Text(checkTitle),
+                                content: Text(checkMessage),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: Text(cancelText),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                    child: Text(deleteText),
+                                  ),
+                                ],
+                              ),
+                            ) ??
+                            false;
+                      },
+                      child: CountingListItem(
+                        categoryList: categoryList,
+                        onTap: () => _navigateToDetail(categoryList),
+                      ),
+                    );
+                  }, childCount: _categoryLists.length),
                 ),
               ),
             ],

@@ -64,3 +64,5 @@ ios/Runner.xcodeproj/project.pbxproj
 ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
 ios/
 android/
+node_modules
+package-lock.json
