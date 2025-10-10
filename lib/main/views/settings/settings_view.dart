@@ -45,10 +45,12 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
+        if (!mounted) return;
         if (!didPop) {
           Navigator.of(context).pop();
         } else {
-          Navigator.of(context).pushNamedAndRemoveUntil(
+          Navigator.pushNamedAndRemoveUntil(
+            context,
             HomeView.routeName,
             (route) => false,
           );
